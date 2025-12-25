@@ -99,9 +99,11 @@ body {
     font-size: 15px;
 }
 
-.nav-links li:hover {
-    background: var(--surface-hover);
-    color: var(--text-main);
+@media (hover: hover) {
+    .nav-links li:hover {
+        background: var(--surface-hover);
+        color: var(--text-main);
+    }
 }
 
 .nav-links li.active {
@@ -190,8 +192,15 @@ section.active {
     transition: background 0.2s;
 }
 
-.stat-card:hover {
+@media (hover: hover) {
+    .stat-card:hover {
+        background: var(--surface-hover);
+    }
+}
+
+.stat-card:active {
     background: var(--surface-hover);
+    transform: scale(0.98);
 }
 
 .dashboard-grid.single-col {
@@ -381,9 +390,11 @@ section.active {
     cursor: pointer;
 }
 
-.info-card-item:hover {
-    background: var(--surface-hover);
-    border-color: rgba(255, 255, 255, 0.2);
+@media (hover: hover) {
+    .info-card-item:hover {
+        background: var(--surface-hover);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
 }
 
 .card-header {
@@ -481,9 +492,16 @@ section.active {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.choice-item:hover {
+@media (hover: hover) {
+    .choice-item:hover {
+        background: var(--surface-hover);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+}
+
+.choice-item:active {
     background: var(--surface-hover);
-    border-color: rgba(255, 255, 255, 0.3);
+    border-color: var(--secondary);
 }
 
 .choice-item.active {
@@ -524,9 +542,11 @@ section.active {
     background: var(--surface);
 }
 
-.stat-card.clickable:hover {
-    border-color: var(--primary);
-    transform: scale(1.02);
+@media (hover: hover) {
+    .stat-card.clickable:hover {
+        border-color: var(--primary);
+        transform: scale(1.02);
+    }
 }
 
 .stat-card.clickable i {
@@ -752,9 +772,11 @@ section.active {
     white-space: nowrap;
 }
 
-.filter-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--text-main);
+@media (hover: hover) {
+    .filter-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text-main);
+    }
 }
 
 .filter-btn.active {
@@ -778,8 +800,15 @@ section.active {
     transition: 0.3s;
 }
 
-.btn-primary:hover {
+@media (hover: hover) {
+    .btn-primary:hover {
+        background: #cc0000;
+    }
+}
+
+.btn-primary:active {
     background: #cc0000;
+    transform: scale(0.98);
 }
 
 /* Modal Checkbox */
@@ -837,7 +866,8 @@ section.active {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100dvh;
+    /* Mobile viewport fix */
     background: rgba(0, 0, 0, 0.8);
     display: flex;
     align-items: center;
@@ -887,47 +917,48 @@ section.active {
         width: 100%;
         height: auto;
         position: relative;
-        padding: 15px;
+        padding: 5px 15px 10px;
         border-bottom: 1px solid var(--glass-border);
         border-right: none;
     }
 
     .logo {
-        margin-bottom: 15px;
+        margin-bottom: 10px;
         justify-content: center;
     }
 
     .logo-icon {
-        font-size: 24px;
+        font-size: 20px;
     }
 
     .logo h1 {
-        font-size: 18px;
+        font-size: 16px;
     }
 
     .nav-links {
         display: flex;
         overflow-x: auto;
-        padding-bottom: 5px;
+        padding-bottom: 2px;
         -webkit-overflow-scrolling: touch;
-        gap: 10px;
+        gap: 6px;
         scrollbar-width: none;
-        /* Hide scrollbar Firefox */
+        margin: 0 -10px;
+        padding: 0 10px;
     }
 
     .nav-links::-webkit-scrollbar {
         display: none;
-        /* Hide scrollbar Chrome/Safari */
     }
 
     .nav-links li {
         flex-shrink: 0;
         margin: 0;
         padding: 8px 12px;
-        font-size: 13px;
+        font-size: 12px;
         white-space: nowrap;
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(255, 255, 255, 0.03);
         border: 1px solid var(--glass-border);
+        border-radius: 99px;
     }
 
     .nav-links li.active {
@@ -935,86 +966,151 @@ section.active {
         border-color: var(--primary);
     }
 
-    .nav-links li span {
-        display: inline-block;
-        /* Ensure text is visible */
+    .header-left h2 {
+        font-size: 20px;
+    }
+
+    .header-left p {
+        font-size: 11px;
     }
 
     /* Fix Flex Container Issues */
     .flight-cards-container {
         flex-direction: column;
+        gap: 10px;
     }
 
     /* Fix Grid Issues */
     .spot-list-grid,
-    .accommodation-cards {
-        grid-template-columns: 1fr;
-    }
-
+    .accommodation-cards,
     .content-grid {
         grid-template-columns: 1fr;
+        gap: 12px;
     }
 
+    /* Compact Dashboard Grid -> Force 2 Columns always */
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
-        /* 2 columns for general stats on tablet/mobile */
+        gap: 8px;
+        /* Tighter gap */
+    }
+
+    .stat-card {
+        padding: 15px 10px;
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+        justify-content: center;
+        height: 100%;
+    }
+
+    .stat-card i {
+        margin-bottom: 0;
+        font-size: 20px;
+    }
+
+    .stat-info h3 {
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+
+    .stat-info p {
+        display: none;
+        /* Hide description to prevent scrolling and wrapping issues */
     }
 
     /* Modal Mobile Optimization */
-    .modal.large {
+    .modal.large,
+    .modal {
         width: 100%;
-        height: 100%;
-        max-height: 100%;
+        height: 100dvh;
+        /* Use dynamic viewport height */
+        max-width: 100%;
+        max-height: 100dvh;
         border-radius: 0;
         display: flex;
         flex-direction: column;
+        padding: 15px;
+        border: none;
+    }
+
+    .modal-header h4 {
+        font-size: 16px;
     }
 
     .modal-body {
         flex-grow: 1;
         overflow-y: auto;
+        margin: 10px 0;
+    }
+
+    .choice-grid {
+        grid-template-columns: repeat(2, 1fr);
+        /* Ensure 2 columns in wizards */
+    }
+
+    .choice-item {
+        padding: 15px 10px;
+        font-size: 12px;
+    }
+
+    .choice-item i {
+        font-size: 20px;
     }
 }
 
 @media (max-width: 480px) {
     .stats-grid {
-        grid-template-columns: 1fr;
-        /* 1 column for very small screens */
+        grid-template-columns: repeat(2, 1fr);
+        /* Keep 2 columns! */
     }
 
     .header-left h2 {
-        font-size: 20px;
-    }
-
-    section h3 {
         font-size: 18px;
     }
 
+    section h3 {
+        font-size: 16px;
+    }
+
     .filter-btn {
-        padding: 6px 14px;
-        font-size: 12px;
+        padding: 6px 10px;
+        font-size: 11px;
     }
 
     .btn-primary {
         width: 100%;
         justify-content: center;
+        padding: 10px;
+        font-size: 13px;
     }
 
     .card-info-row {
-        font-size: 12px;
+        font-size: 11px;
     }
 
-    /* Adjust flight route layout for small screens */
-    .flight-route {
-        gap: 10px;
-    }
-
-    .airport .code {
-        font-size: 16px;
-    }
-
+    /* Route details compact */
     .route-details {
-        margin-left: 15px;
-        /* Reduce margin to prevent clipping */
+        margin-left: 10px;
+        padding-left: 10px;
+    }
+
+    .step {
+        gap: 15px;
+    }
+
+    .step-content strong {
+        font-size: 13px;
+    }
+
+    .step-content p {
+        font-size: 11px;
+    }
+
+    .map-link-container {
+        margin-top: 15px;
     }
 }
