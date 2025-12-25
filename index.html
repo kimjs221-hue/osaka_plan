@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Osaka Plan - 김제선 오사카 플랜</title>
+    <meta name="description" content="오사카 맛집과 쇼핑을 위한 프리한 여행 가이드.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+KR:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="background-overlay"></div>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="logo">
+                <span class="logo-icon">🏯</span>
+                <h1>OSAKA<span>PLAN</span></h1>
+            </div>
+            <ul class="nav-links">
+                <li class="active" data-section="dashboard">
+                    <i data-lucide="layout-dashboard"></i> <span>대시보드</span>
+                </li>
+                <li data-section="restaurants">
+                    <i data-lucide="utensils"></i> <span>맛집 리스트</span>
+                </li>
+                <li data-section="desserts">
+                    <i data-lucide="coffee"></i> <span>디저트 & 카페</span>
+                </li>
+                <li data-section="shopping">
+                    <i data-lucide="shopping-bag"></i> <span>쇼핑 스팟</span>
+                </li>
+                <li data-section="bars">
+                    <i data-lucide="beer"></i> <span>술집 & 클럽</span>
+                </li>
+                <li data-section="activities">
+                    <i data-lucide="dumbbell"></i> <span>놀거리 & 활동</span>
+                </li>
+                <li data-section="map">
+                    <i data-lucide="map-pin"></i> <span>숙소 위치</span>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <p>&copy; 2025 Osaka Plan</p>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="content">
+            <header>
+                <div class="header-left">
+                    <h2 id="section-title">환영합니다!</h2>
+                    <p id="section-desc">오사카 여행 계획 레츠고</p>
+                </div>
+                <div class="header-right">
+                    <div class="trip-dates">
+                        <i data-lucide="calendar-range"></i>
+                        <span id="display-dates">2025-12-31 ~ 2026-01-04</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Sections Container -->
+            <div id="sections">
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i data-lucide="map"></i>
+                            <div class="stat-info">
+                                <h3>발견된 명소</h3>
+                                <p id="place-count">0곳</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid single-col">
+                        <!-- Transport Route -->
+                        <div class="grid-item transport-route">
+                            <h3>🚀 공항에서 숙소까지 (최단 경로)</h3>
+                            <div class="route-details">
+                                <div class="step">
+                                    <span class="time">14:40</span>
+                                    <div class="step-content">
+                                        <strong>간사이 공항(KIX) 도착</strong>
+                                        <p>제2터미널 도착 시 제1터미널로 셔틀 이동</p>
+                                    </div>
+                                </div>
+                                <div class="step">
+                                    <span class="time">15:35</span>
+                                    <div class="step-content">
+                                        <strong>난카이 특급 라피트(Rapi:t) 탑승</strong>
+                                        <p>30분 간격 운행, 전석 지정석 (약 1,490엔)</p>
+                                    </div>
+                                </div>
+                                <div class="step">
+                                    <span class="time">16:15</span>
+                                    <div class="step-content">
+                                        <strong>난카이 난바역 도착</strong>
+                                        <p>공항에서 약 40분 소요</p>
+                                    </div>
+                                </div>
+                                <div class="step">
+                                    <span class="time">16:25</span>
+                                    <div class="step-content">
+                                        <strong>난바 캐빈 캡슐호텔 도착</strong>
+                                        <p>역에서 도보 5-10분</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="map-link-container">
+                                <a href="https://www.google.com/maps/dir/Kansai+International+Airport,+1+Senshukukonaka,+Tajiri,+Sennan+District,+Osaka+549-0001,+Japan/Cabin+Capsule+Hotel+J-SHIP+Osaka+Namba/"
+                                    target="_blank" class="btn-primary">
+                                    <i data-lucide="navigation"></i> 구글맵 최단경로 상세 확인
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="grid-item highlights">
+                            <h3>✈️ 항공권 정보</h3>
+                            <div class="flight-cards-container">
+                                <div class="flight-info-card">
+                                    <div class="card-tag departure">출국</div>
+                                    <div class="flight-route">
+                                        <div class="airport">
+                                            <span class="code">ICN</span>
+                                            <span class="name">인천</span>
+                                        </div>
+                                        <div class="flight-arrow">
+                                            <i data-lucide="plane"></i>
+                                            <span class="flight-num">BX174</span>
+                                        </div>
+                                        <div class="airport">
+                                            <span class="code">KIX</span>
+                                            <span class="name">오사카</span>
+                                        </div>
+                                    </div>
+                                    <div class="flight-details">
+                                        <p><strong>12월 31일</strong> 12:40 (T2) → 14:40 (T1)</p>
+                                        <p><strong>예약번호:</strong> KKWKGF</p>
+                                    </div>
+                                </div>
+
+                                <div class="flight-info-card">
+                                    <div class="card-tag return">귀국</div>
+                                    <div class="flight-route">
+                                        <div class="airport">
+                                            <span class="code">KIX</span>
+                                            <span class="name">오사카</span>
+                                        </div>
+                                        <div class="flight-arrow return-arrow">
+                                            <i data-lucide="plane"></i>
+                                            <span class="flight-num">BX171</span>
+                                        </div>
+                                        <div class="airport">
+                                            <span class="code">ICN</span>
+                                            <span class="name">인천</span>
+                                        </div>
+                                    </div>
+                                    <div class="flight-details">
+                                        <p><strong>1월 4일</strong> 12:00 (T1) → 14:05 (T2)</p>
+                                        <p><strong>예약번호:</strong> KKWKGF</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h3 style="margin-top: 20px;">🏛️ 꼭 가봐야 할 명소</h3>
+                            <div class="spot-list-grid">
+                                <div class="spot-item">
+                                    <img src="https://images.unsplash.com/photo-1590559899731-a382839e5549?auto=format&fit=crop&w=400&q=80"
+                                        alt="Osaka Castle">
+                                    <div class="spot-text">
+                                        <h4>오사카 성</h4>
+                                        <p>역사와 전통의 상징</p>
+                                    </div>
+                                </div>
+                                <div class="spot-item">
+                                    <img src="https://images.unsplash.com/photo-1549110462-817db4957e8f?auto=format&fit=crop&w=400&q=80"
+                                        alt="Dotonbori">
+                                    <div class="spot-text">
+                                        <h4>도톤보리</h4>
+                                        <p>미식과 쇼핑의 천국</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Restaurants Section -->
+                <section id="restaurants">
+                    <div class="section-header">
+                        <h3>🍱 오사카 맛집 리스트</h3>
+                        <button id="add-restaurant-btn" class="btn-primary"><i data-lucide="plus"></i> 맛집 추가</button>
+                    </div>
+                    <div class="filter-group">
+                        <div class="area-filter-bar" data-for="restaurants">
+                            <span class="filter-label">지역:</span>
+                            <button class="filter-btn active" data-area="all">전체</button>
+                            <button class="filter-btn" data-area="shinsaibashi">신사이바시</button>
+                            <button class="filter-btn" data-area="namba">난바/도톤보리</button>
+                            <button class="filter-btn" data-area="umeda">우메다</button>
+                            <button class="filter-btn" data-area="tenma">텐마</button>
+                        </div>
+                        <div class="filter-bar" data-for="restaurants">
+                            <span class="filter-label">종류:</span>
+                            <button class="filter-btn active" data-filter="all">전체</button>
+                            <button class="filter-btn" data-filter="sushi">스시/카이센동</button>
+                            <button class="filter-btn" data-filter="ramen">라멘</button>
+                            <button class="filter-btn" data-filter="yakiniku">야키니쿠</button>
+                            <button class="filter-btn" data-filter="katsu">돈카츠/규카츠</button>
+                            <button class="filter-btn" data-filter="udon">우동/소바</button>
+                            <button class="filter-btn" data-filter="okonomiyaki">오코노미야키</button>
+                            <button class="filter-btn" data-filter="izakaya">이자카야/술집</button>
+                            <button class="filter-btn" data-filter="others">기타</button>
+                        </div>
+                    </div>
+                    <div id="restaurant-list" class="content-grid">
+                        <!-- Restaurants items will go here -->
+                    </div>
+                </section>
+
+                <!-- Desserts Section -->
+                <section id="desserts">
+                    <div class="section-header">
+                        <h3>🍰 디저트 & 카페 컬렉션</h3>
+                        <button id="add-dessert-btn" class="btn-primary"><i data-lucide="plus"></i> 카페 추가</button>
+                    </div>
+                    <div class="filter-group">
+                        <div class="area-filter-bar" data-for="desserts">
+                            <span class="filter-label">지역:</span>
+                            <button class="filter-btn active" data-area="all">전체</button>
+                            <button class="filter-btn" data-area="shinsaibashi">신사이바시</button>
+                            <button class="filter-btn" data-area="namba">난바/도톤보리</button>
+                            <button class="filter-btn" data-area="umeda">우메다</button>
+                            <button class="filter-btn" data-area="tenma">텐마</button>
+                        </div>
+                        <div class="filter-bar" data-for="desserts">
+                            <span class="filter-label">종류:</span>
+                            <button class="filter-btn active" data-filter="all">전체</button>
+                            <button class="filter-btn" data-filter="cafe">카페/팬케이크</button>
+                            <button class="filter-btn" data-filter="bakery">베이커리/케이크</button>
+                            <button class="filter-btn" data-filter="parfait">파르페/아이스크림</button>
+                            <button class="filter-btn" data-filter="traditional">일본식/말차</button>
+                        </div>
+                    </div>
+                    <div id="dessert-list" class="content-grid">
+                        <!-- Dessert items will go here -->
+                    </div>
+                </section>
+
+                <!-- Shopping Section -->
+                <section id="shopping">
+                    <div class="section-header">
+                        <h3>🛍️ 추천 쇼핑 스팟</h3>
+                        <button id="add-shopping-btn" class="btn-primary"><i data-lucide="plus"></i> 장소 추가</button>
+                    </div>
+                    <div class="filter-group">
+                        <div class="area-filter-bar" data-for="shopping">
+                            <span class="filter-label">지역:</span>
+                            <button class="filter-btn active" data-area="all">전체</button>
+                            <button class="filter-btn" data-area="shinsaibashi">신사이바시</button>
+                            <button class="filter-btn" data-area="namba">난바/호리에</button>
+                            <button class="filter-btn" data-area="umeda">우메다</button>
+                            <button class="filter-btn" data-area="nipponbashi">닛폰바시</button>
+                        </div>
+                        <div class="filter-bar" data-for="shopping">
+                            <span class="filter-label">종류:</span>
+                            <button class="filter-btn active" data-filter="all">전체</button>
+                            <button class="filter-btn" data-filter="dept">백화점/몰</button>
+                            <button class="filter-btn" data-filter="street">편집샵/스트릿</button>
+                            <button class="filter-btn" data-filter="vintage">빈티지</button>
+                            <button class="filter-btn" data-filter="hobby">취미/캐릭터</button>
+                        </div>
+                    </div>
+                    <div id="shopping-list" class="content-grid">
+                        <!-- Shopping items will go here -->
+                    </div>
+                </section>
+
+                <!-- Activities Section -->
+                <section id="activities">
+                    <div class="section-header">
+                        <h3>🎡 놀거리 & 체험</h3>
+                        <button id="add-activity-btn" class="btn-primary"><i data-lucide="plus"></i> 활동 추가</button>
+                    </div>
+                    <div class="filter-group">
+                        <div class="area-filter-bar" data-for="activities">
+                            <span class="filter-label">지역:</span>
+                            <button class="filter-btn active" data-area="all">전체</button>
+                            <button class="filter-btn" data-area="shinsaibashi">신사이바시/난바</button>
+                            <button class="filter-btn" data-area="umeda">우메다</button>
+                            <button class="filter-btn" data-area="osakabay">오사카항/기타</button>
+                        </div>
+                        <div class="filter-bar" data-for="activities">
+                            <span class="filter-label">종류:</span>
+                            <button class="filter-btn active" data-filter="all">전체</button>
+                            <button class="filter-btn" data-filter="theme">테마파크/명소</button>
+                            <button class="filter-btn" data-filter="onsen">온천/스파</button>
+                            <button class="filter-btn" data-filter="sports">스포츠/운동</button>
+                            <button class="filter-btn" data-filter="others">체험/기타</button>
+                        </div>
+                    </div>
+                    <div id="activity-list" class="content-grid">
+                        <!-- Activity items will go here -->
+                    </div>
+                </section>
+
+                <!-- Bars Section -->
+                <section id="bars">
+                    <div class="section-header">
+                        <h3>🍸 오사카 밤문화 & 술집</h3>
+                        <button id="add-bar-btn" class="btn-primary"><i data-lucide="plus"></i> 술집 추가</button>
+                    </div>
+                    <div class="filter-group">
+                        <div class="area-filter-bar" data-for="bars">
+                            <span class="filter-label">지역:</span>
+                            <button class="filter-btn active" data-area="all">전체</button>
+                            <button class="filter-btn" data-area="shinsaibashi">신사이바시</button>
+                            <button class="filter-btn" data-area="namba">난바/우라난바</button>
+                            <button class="filter-btn" data-area="umeda">우메다</button>
+                        </div>
+                        <div class="filter-bar" data-for="bars">
+                            <span class="filter-label">종류:</span>
+                            <button class="filter-btn active" data-filter="all">전체</button>
+                            <button class="filter-btn" data-filter="club">클럽</button>
+                            <button class="filter-btn" data-filter="hunting">헌팅/소셜</button>
+                            <button class="filter-btn" data-filter="izakaya">이자카야/바</button>
+                        </div>
+                    </div>
+                    <div id="bar-list" class="content-grid">
+                        <!-- Bar items will go here -->
+                    </div>
+                </section>
+
+                <!-- Map Section -->
+                <section id="map">
+                    <div class="map-container">
+                        <div class="map-header-bar">
+                            <h4>🏨 숙소 정보</h4>
+                            <p>일자별 숙소 위치를 확인하세요.</p>
+                        </div>
+
+                        <div class="accommodation-cards">
+                            <div class="acc-card active">
+                                <span class="acc-date">12/31 - 1/1</span>
+                                <h5>난바 캐빈 캡슐호텔</h5>
+                                <p>난바역 도보 거리</p>
+                                <a href="https://www.google.com/maps/search/Osaka+Namba+Cabin+Capsule+Hotel/"
+                                    target="_blank" class="btn-text-sm">지도 앱에서 보기 <i
+                                        data-lucide="external-link"></i></a>
+                            </div>
+                            <div class="acc-card">
+                                <span class="acc-date">1/1 - 1/4</span>
+                                <h5>신사이바시스지 에어비앤비</h5>
+                                <p>2-chōme-1-30 Shinsaibashisuji</p>
+                                <a href="https://www.google.com/maps/search/2-chōme-1-30+Shinsaibashisuji,+Chūō-ku,+Osaka/"
+                                    target="_blank" class="btn-text-sm">지도 앱에서 보기 <i
+                                        data-lucide="external-link"></i></a>
+                            </div>
+                        </div>
+
+                        <iframe width="100%" height="350" style="border:0; border-radius: 16px;" loading="lazy"
+                            allowfullscreen
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3281.336496417757!2d135.5002444!3d34.6677464!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000e71360057089%3A0xe673cf8794c40590!2z7J2867O4IOOAkjU0Mi0wMDg1IE9zYWthLCBDaMWrby1rdSwgU2hpbnNhaWJhc2hpc3VqaSwgMi1jaMWbWUtMS0zMA!5e0!3m2!1sko!2skr!4v1716300000000!5m2!1sko!2skr">
+                        </iframe>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="modal-container" class="hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h4 id="modal-title">장소 추가</h4>
+                <button id="close-modal"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="item-name" placeholder="장소명 (예: 이치란 라멘)">
+                <input type="text" id="item-menu" placeholder="주요 메뉴 (예: 돈코츠 라멘)">
+                <input type="text" id="item-price" placeholder="가격대 (예: 1,000엔~)">
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="item-res"> 예약 필요함</label>
+                </div>
+                <input type="text" id="item-map" placeholder="구글맵 링크">
+                <textarea id="item-desc" placeholder="상세 설명"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button id="save-item" class="btn-primary">저장하기</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
