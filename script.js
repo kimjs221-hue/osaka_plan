@@ -444,10 +444,12 @@ function setupEventListeners() {
 function openModal(type) {
     currentAddingType = type;
     document.getElementById('modal-container').classList.remove('hidden');
+    document.body.classList.add('no-scroll'); // Lock scroll
 }
 
 function closeModal() {
     document.getElementById('modal-container').classList.add('hidden');
+    document.body.classList.remove('no-scroll'); // Unlock scroll
 }
 
 function saveItem() {
@@ -643,10 +645,14 @@ function setupRecommendation() {
             recommendState = { step: 1, time: '', area: '', category: '', theme: '', vibe: '' };
             updateWizardUI();
             modal.classList.remove('hidden');
+            document.body.classList.add('no-scroll');
         };
     }
 
-    const closeModal = () => modal.classList.add('hidden');
+    const closeModal = () => {
+        modal.classList.add('hidden');
+        document.body.classList.remove('no-scroll');
+    };
     closeBtns.forEach(btn => btn.onclick = closeModal);
     window.onclick = (e) => { if (e.target === modal) closeModal(); };
 
@@ -1114,6 +1120,7 @@ function setupReservationList() {
     if (startBtn) {
         startBtn.onclick = () => {
             modal.classList.remove('hidden');
+            document.body.classList.add('no-scroll');
             const pool = [...state.restaurants, ...state.bars, ...state.activities, ...state.desserts, ...state.shopping];
             const filtered = pool.filter(i => i.res === true);
 
@@ -1126,7 +1133,10 @@ function setupReservationList() {
         };
     }
 
-    closeBtns.forEach(btn => btn.onclick = () => modal.classList.add('hidden'));
+    closeBtns.forEach(btn => btn.onclick = () => {
+        modal.classList.add('hidden');
+        document.body.classList.remove('no-scroll');
+    });
 }
 
 // --- Smoking Area Guide Logic ---
@@ -1182,11 +1192,15 @@ function setupSmokingInfo() {
     if (startBtn) {
         startBtn.onclick = () => {
             modal.classList.remove('hidden');
+            document.body.classList.add('no-scroll');
             renderSmokingList();
         };
     }
 
-    if (closeBtn) closeBtn.onclick = () => modal.classList.add('hidden');
+    if (closeBtn) closeBtn.onclick = () => {
+        modal.classList.add('hidden');
+        document.body.classList.remove('no-scroll');
+    };
 
     // Filter Buttons logic
     document.querySelectorAll('.smoking-filter').forEach(btn => {
