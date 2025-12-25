@@ -100,6 +100,14 @@ body {
 }
 
 @media (hover: hover) {
+    .no-scroll {
+        overflow: hidden;
+        height: 100dvh;
+        /* Prevent scrolling on mobile */
+        position: fixed;
+        width: 100%;
+    }
+
     .nav-links li:hover {
         background: var(--surface-hover);
         color: var(--text-main);
@@ -1010,16 +1018,19 @@ section.active {
     }
 
     .stat-info h3 {
-        font-size: 12px;
+        font-size: 11px;
+        /* Further reduce font size to prevent wrapping */
+        letter-spacing: -0.5px;
+        /* Tighten letter spacing */
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: 100%;
+        line-height: 1.2;
     }
 
     .stat-info p {
         display: none;
-        /* Hide description to prevent scrolling and wrapping issues */
     }
 
     /* Modal Mobile Optimization */
@@ -1106,11 +1117,68 @@ section.active {
         font-size: 13px;
     }
 
-    .step-content p {
-        font-size: 11px;
+    .modal-header {
+        position: relative;
+        padding-right: 40px;
+        /* Make space for close button */
     }
 
-    .map-link-container {
-        margin-top: 15px;
+    .modal-header button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.1);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+    }
+
+    /* World Cup Mobile Optimization */
+    .vs-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+        overflow-y: auto;
+        flex-grow: 1;
+        /* Take remaining space */
+        justify-content: center;
+        /* Center vertically */
+    }
+
+    #wc-game-view {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        /* Fill modal height */
+    }
+
+    .wc-card-wrapper {
+        width: 100%;
+        max-width: 280px;
+        /* Limit width */
+        padding: 10px;
+        /* Reduce padding */
+    }
+
+    .wc-card-wrapper img {
+        height: 120px;
+        /* Limit image height */
+        object-fit: cover;
+    }
+
+    /* Hide VS text to save space or make it small */
+    .vs-container>div:nth-child(2) {
+        margin: -10px 0;
+        font-size: 16px;
+        z-index: 10;
+        background: var(--bg-dark);
+        padding: 5px 15px;
+        border-radius: 20px;
+        border: 1px solid var(--primary);
     }
 }
