@@ -46,6 +46,9 @@
                 <li data-section="activities">
                     <i data-lucide="dumbbell"></i> <span>놀거리 & 활동</span>
                 </li>
+                <li data-section="convenience">
+                    <i data-lucide="store"></i> <span>편의점</span>
+                </li>
                 <li data-section="map">
                     <i data-lucide="map-pin"></i> <span>숙소 위치</span>
                 </li>
@@ -59,7 +62,13 @@
         <main class="content">
             <header>
                 <div class="header-left">
-                    <h2 id="section-title">환영합니다!</h2>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <h2 id="section-title">환영합니다!</h2>
+                        <span id="place-count-badge"
+                            style="background: var(--primary); color: white; padding: 2px 10px; border-radius: 99px; font-size: 13px; font-weight: 700;">
+                            총 <span id="place-count">0</span>곳 탐색 중
+                        </span>
+                    </div>
                     <p id="section-desc">오사카 여행 계획 레츠고</p>
                 </div>
                 <div class="header-right">
@@ -75,11 +84,39 @@
                 <!-- Dashboard Section -->
                 <section id="dashboard" class="active">
                     <div class="stats-grid">
-                        <div class="stat-card">
-                            <i data-lucide="map"></i>
+                        <div class="stat-card clickable" id="start-recommend">
+                            <i data-lucide="sparkles"></i>
                             <div class="stat-info">
-                                <h3>발견된 명소</h3>
-                                <p id="place-count">0곳</p>
+                                <h3>맞춤 추천</h3>
+                                <p>장소 추천 위저드</p>
+                            </div>
+                        </div>
+                        <div class="stat-card clickable" id="start-shopping-tracker">
+                            <i data-lucide="shopping-cart" style="color: #fbbf24;"></i>
+                            <div class="stat-info">
+                                <h3>쇼핑 알고리즘</h3>
+                                <p>취향 맞춤 상점 추적</p>
+                            </div>
+                        </div>
+                        <div class="stat-card clickable" id="start-worldcup">
+                            <i data-lucide="trophy" style="color: #f472b6;"></i>
+                            <div class="stat-info">
+                                <h3>취향 월드컵</h3>
+                                <p>최고의 장소 찾기</p>
+                            </div>
+                        </div>
+                        <div class="stat-card clickable" id="start-reservation-list">
+                            <i data-lucide="calendar-check" style="color: #4ade80;"></i>
+                            <div class="stat-info">
+                                <h3>예약 필수</h3>
+                                <p>미리 준비할 장소</p>
+                            </div>
+                        </div>
+                        <div class="stat-card clickable" id="start-smoking">
+                            <i data-lucide="cigar" style="color: #94a3b8;"></i>
+                            <div class="stat-info">
+                                <h3>흡연구역</h3>
+                                <p>오사카 매너 맵</p>
                             </div>
                         </div>
                     </div>
@@ -221,6 +258,7 @@
                             <button class="filter-btn" data-filter="katsu">돈카츠/규카츠</button>
                             <button class="filter-btn" data-filter="udon">우동/소바</button>
                             <button class="filter-btn" data-filter="okonomiyaki">오코노미야키</button>
+                            <button class="filter-btn" data-filter="teishoku">일본 가정식</button>
                             <button class="filter-btn" data-filter="izakaya">이자카야/술집</button>
                             <button class="filter-btn" data-filter="others">기타</button>
                         </div>
@@ -333,6 +371,7 @@
                         <div class="filter-bar" data-for="bars">
                             <span class="filter-label">종류:</span>
                             <button class="filter-btn active" data-filter="all">전체</button>
+                            <button class="filter-btn" data-filter="nomihoudai">무제한(Nomihoudai)</button>
                             <button class="filter-btn" data-filter="club">클럽</button>
                             <button class="filter-btn" data-filter="hunting">헌팅/소셜</button>
                             <button class="filter-btn" data-filter="izakaya">이자카야/바</button>
@@ -340,6 +379,26 @@
                     </div>
                     <div id="bar-list" class="content-grid">
                         <!-- Bar items will go here -->
+                    </div>
+                </section>
+
+                <!-- Convenience Store Section -->
+                <section id="convenience">
+                    <div class="section-header">
+                        <h3>🏪 편의점 필수 먹거리</h3>
+                        <button id="add-convenience-btn" class="btn-primary"><i data-lucide="plus"></i> 아이템 추가</button>
+                    </div>
+                    <div class="filter-group">
+                        <div class="filter-bar" data-for="convenience">
+                            <span class="filter-label">브랜드:</span>
+                            <button class="filter-btn active" data-filter="all">전체</button>
+                            <button class="filter-btn" data-filter="seven">세븐일레븐</button>
+                            <button class="filter-btn" data-filter="lawson">로손</button>
+                            <button class="filter-btn" data-filter="family">패밀리마트</button>
+                        </div>
+                    </div>
+                    <div id="convenience-list" class="content-grid">
+                        <!-- Convenience items will go here -->
                     </div>
                 </section>
 
@@ -380,8 +439,86 @@
         </main>
     </div>
 
+    <!-- Recommendation Modal -->
+    <div id="recommend-modal" class="modal-container hidden">
+        <div class="modal large">
+            <div class="modal-header">
+                <h4>✨ 스마트 추천 위저드</h4>
+                <button class="close-recommend"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body wizard-body">
+                <!-- Step 1: Time -->
+                <div class="wizard-step active" data-step="1">
+                    <h5>언제 방문하실 계획인가요?</h5>
+                    <div class="choice-grid">
+                        <div class="choice-item" data-val="morning"><i>🌅</i>아침 (08:00~12:00)</div>
+                        <div class="choice-item" data-val="afternoon"><i>☀️</i>오후 (12:00~18:00)</div>
+                        <div class="choice-item" data-val="evening"><i>🌆</i>저녁 (18:00~21:00)</div>
+                        <div class="choice-item" data-val="night"><i>🌙</i>심야 (21:00~익일)</div>
+                    </div>
+                </div>
+                <!-- Step 2: Area -->
+                <div class="wizard-step" data-step="2">
+                    <h5>어디서 시간을 보내실 건가요?</h5>
+                    <div class="choice-grid">
+                        <div class="choice-item" data-val="namba"><i>🏯</i>난바/도톤보리</div>
+                        <div class="choice-item" data-val="shinsaibashi"><i>🛍️</i>신사이바시</div>
+                        <div class="choice-item" data-val="umeda"><i>🌃</i>우메다</div>
+                        <div class="choice-item" data-val="tenma"><i>🏮</i>텐마</div>
+                        <div class="choice-item" data-val="osakabay"><i>🎡</i>오사카항</div>
+                        <div class="choice-item" data-val="all"><i>🌍</i>어디든 좋아!</div>
+                    </div>
+                </div>
+                <!-- Step 3: Category -->
+                <div class="wizard-step" data-step="3">
+                    <h5>무엇을 하고 싶으신가요?</h5>
+                    <div class="choice-grid">
+                        <div class="choice-item" data-val="all"><i>🌟</i>통합 추천 (어디든!)</div>
+                        <div class="choice-item" data-val="restaurants"><i>🍱</i>든든한 식사</div>
+                        <div class="choice-item" data-val="desserts"><i>🍰</i>달콤한 디저트</div>
+                        <div class="choice-item" data-val="shopping"><i>🎁</i>쇼핑/굿즈</div>
+                        <div class="choice-item" data-val="bars"><i>🥃</i>술 한잔/헌팅</div>
+                        <div class="choice-item" data-val="activities"><i>🎮</i>놀거리/체험</div>
+                    </div>
+                </div>
+                <!-- Step 4: Menu/Theme (Akinator style) -->
+                <div class="wizard-step" data-step="4">
+                    <h5 id="wizard-step-3-title">무엇을 선호하시나요?</h5>
+                    <div class="choice-grid" id="theme-choice-grid">
+                        <!-- Dynamic choices will be injected here -->
+                    </div>
+                </div>
+                <!-- Step 5: Vibe/Special -->
+                <div class="wizard-step" data-step="5">
+                    <h5>어떤 분위기를 선호하시나요?</h5>
+                    <div class="choice-grid">
+                        <div class="choice-item" data-val="all"><i>✨</i> 어디든 좋아!</div>
+                        <div class="choice-item" data-val="res"><i>📅</i> 예약 필수 (맛집 위주)</div>
+                        <div class="choice-item" data-val="hunting"><i>🤝</i> 소셜/심야 만남</div>
+                        <div class="choice-item" data-val="budget"><i>💰</i> 가성비 명점</div>
+                        <div class="choice-item" data-val="premium"><i>💎</i> 프리미엄/고급</div>
+                    </div>
+                </div>
+                <!-- Step 6: Result -->
+                <div class="wizard-step" data-step="6">
+                    <h5 id="recommend-result-title">이런 곳은 어떠세요?</h5>
+                    <div id="recommend-result-list" class="content-grid">
+                        <!-- Result cards will be injected here -->
+                    </div>
+                    <div style="text-align:center; margin-top:30px;">
+                        <button id="restart-recommend" class="btn-primary">다시 추천받기</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="prev-step" class="btn-secondary hidden">이전으로</button>
+                <span class="step-indicator">Step 1 / 6</span>
+            </div>
+        </div>
+    </div>
+
     <!-- Modals -->
-    <div id="modal-container" class="hidden">
+    <div id="modal-container" class="modal-container hidden">
         <div class="modal">
             <div class="modal-header">
                 <h4 id="modal-title">장소 추가</h4>
@@ -391,8 +528,9 @@
                 <input type="text" id="item-name" placeholder="장소명 (예: 이치란 라멘)">
                 <input type="text" id="item-menu" placeholder="주요 메뉴 (예: 돈코츠 라멘)">
                 <input type="text" id="item-price" placeholder="가격대 (예: 1,000엔~)">
-                <div class="checkbox-group">
-                    <label><input type="checkbox" id="item-res"> 예약 필요함</label>
+                <div class="checkbox-group" style="display: flex; gap: 15px;">
+                    <label><input type="checkbox" id="item-res"> 예약 필수</label>
+                    <label><input type="checkbox" id="item-smoking"> 흡연 가능</label>
                 </div>
                 <input type="text" id="item-map" placeholder="구글맵 링크">
                 <textarea id="item-desc" placeholder="상세 설명"></textarea>
@@ -402,8 +540,163 @@
             </div>
         </div>
     </div>
+    <!-- Shopping Tracker Modal -->
+    <div id="shopping-tracker-modal" class="modal-container hidden">
+        <div class="modal large">
+            <div class="modal-header">
+                <h4>🛍️ 쇼핑 추적 알고리즘</h4>
+                <button class="close-shopping-tracker"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body">
+                <div id="st-wizard">
+                    <div class="st-step active" data-step="1">
+                        <h5 style="text-align: center; margin-bottom: 25px;">찾고 계신 브랜드가 있나요?</h5>
+                        <div class="choice-grid"
+                            style="grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px;">
+                            <div class="choice-item st-style" data-style="gu">GU</div>
+                            <div class="choice-item st-style" data-style="zara">ZARA</div>
+                            <div class="choice-item st-style" data-style="hnm">H&M</div>
+                            <div class="choice-item st-style" data-style="nike">나이키</div>
+                            <div class="choice-item st-style" data-style="adidas">아디다스</div>
+                            <div class="choice-item st-style" data-style="abc">ABC마트</div>
+                            <div class="choice-item st-style" data-style="mont">몽벨</div>
+                            <div class="choice-item st-style" data-style="muji">무인양품</div>
+                            <div class="choice-item st-style" data-style="lush">러쉬</div>
+                            <div class="choice-item st-style" data-style="supreme">슈프림</div>
+                            <div class="choice-item st-style" data-style="stussy">스투시</div>
+                            <div class="choice-item st-style" data-style="human">휴먼메이드</div>
+                            <div class="choice-item st-style" data-style="bape">베이프</div>
+                            <div class="choice-item st-style" data-style="beams">빔즈</div>
+                            <div class="choice-item st-style" data-style="porter">포터</div>
+                            <div class="choice-item st-style" data-style="vivienne">비비안</div>
+                            <div class="choice-item st-style" data-style="issey">이세이</div>
+                            <div class="choice-item st-style" data-style="margiela">마르지엘라</div>
+                            <div class="choice-item st-style" data-style="vintage">빈티지</div>
+                            <div class="choice-item st-style" data-style="all"
+                                style="background: var(--primary); color: white;">전부 보기</div>
+                        </div>
+                    </div>
+                    <div class="st-step hidden" data-step="2">
+                        <h5 style="text-align: center; margin-bottom: 25px;">주로 어디서 쇼핑하실 건가요?</h5>
+                        <div class="choice-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 20px;">
+                            <div class="choice-item st-area" data-area="all">전체 지역</div>
+                            <div class="choice-item st-area" data-area="shinsaibashi">신사이바시</div>
+                            <div class="choice-item st-area" data-area="namba">난바</div>
+                            <div class="choice-item st-area" data-area="umeda">우메다</div>
+                        </div>
+                    </div>
+                    <div class="st-step hidden" data-step="3">
+                        <h5 style="text-align: center; margin-bottom: 20px;">🔍 사용자님을 위한 맞춤 상점 리스트</h5>
+                        <div id="st-result-list" class="spot-list-grid"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="st-prev" class="btn-secondary hidden">이전 단계</button>
+                <div class="st-indicator" style="font-size: 14px; font-weight: 700; color: var(--text-dim);">Step 1 / 3
+                </div>
+                <button id="st-next" class="btn-primary">다음 단계</button>
+            </div>
+        </div>
+    </div>
 
-    <script src="script.js"></script>
+    <!-- World Cup Modal -->
+    <div id="worldcup-modal" class="modal-container hidden">
+        <div class="modal large">
+            <div class="modal-header">
+                <h4>🏆 취향 이상형 월드컵</h4>
+                <button class="close-worldcup"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body">
+                <div id="wc-setup">
+                    <h5 style="text-align: center; margin-bottom: 20px;">어떤 종목으로 월드컵을 할까요?</h5>
+                    <div class="choice-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 20px;">
+                        <div class="choice-item wc-cat" data-cat="all"><i>🏆</i>통합 월드컵</div>
+                        <div class="choice-item wc-cat" data-cat="restaurants"><i>🍣</i>오사카 맛집</div>
+                        <div class="choice-item wc-cat" data-cat="teishoku"><i>🍱</i>일본 가정식</div>
+                        <div class="choice-item wc-cat" data-cat="bars"><i>🍹</i>술집 & 바</div>
+                        <div class="choice-item wc-cat" data-cat="activities"><i>🎢</i>랜드마크/테마</div>
+                    </div>
+                    <h5 style="text-align: center; margin-bottom: 20px;">선호 지역이 있나요?</h5>
+                    <div class="choice-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 25px;">
+                        <div class="choice-item wc-area" data-area="all">어디든 좋아</div>
+                        <div class="choice-item wc-area" data-area="namba">난바/도톤보리</div>
+                        <div class="choice-item wc-area" data-area="umeda">우메다</div>
+                        <div class="choice-item wc-area" data-area="shinsaibashi">신사이바시</div>
+                        <div class="choice-item wc-area" data-area="tenma">텐마 노포</div>
+                    </div>
+                    <button id="wc-start-btn" class="btn-primary" style="margin: 0 auto; width: 100%;">이상형 월드컵
+                        시작!</button>
+                </div>
+                <div id="wc-game-view" class="hidden">
+                    <div id="worldcup-progress"
+                        style="text-align: center; margin-bottom: 20px; font-weight: 700; color: var(--text-dim);">
+                    </div>
+                    <div class="vs-container"
+                        style="display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 20px;">
+                        <div id="wc-left" class="wc-card-wrapper"></div>
+                        <div style="font-size: 24px; font-weight: 900; color: var(--primary);">VS</div>
+                        <div id="wc-right" class="wc-card-wrapper"></div>
+                    </div>
+                </div>
+                <div id="wc-winner" class="hidden" style="text-align: center; padding: 40px;">
+                    <h5 style="font-size: 24px; color: var(--primary); margin-bottom: 20px;">⭐ 최종 우승! ⭐</h5>
+                    <div id="wc-winner-display"></div>
+                    <button class="btn-primary close-worldcup" style="margin: 20px auto;">결과 확정</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reservation Mandatory Modal -->
+    <div id="reservation-modal" class="modal-container hidden">
+        <div class="modal large">
+            <div class="modal-header">
+                <h4>  예약 필수 장소 리스트</h4>
+                <button class="close-reservation"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 20px; color: var(--text-dim);">이곳들은 인기가 많아 사전 예약이 권장됩니다. 클릭하여 구글맵 정보를 확인하세요.
+                </p>
+                <div id="reservation-results" class="spot-list-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Smoking Modal -->
+    <div id="smoking-modal" class="modal-container hidden">
+        <div class="modal large">
+            <div class="modal-header">
+                <h4>🚬 오사카 흡역구역 가이드</h4>
+                <button class="close-smoking"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 20px; color: #fbbf24; font-size: 13px; font-weight: 600;">⚠️ 2025년부터 오사카 전역 노상
+                    흡연이 금지됩니다. 지정된 구역을 필히 이용하세요!</p>
+
+                <!-- Smoking Area Filters -->
+                <div class="choice-grid" style="grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 20px;">
+                    <div class="choice-item active smoking-filter" data-area="all"
+                        style="padding: 10px; font-size: 12px;">전체</div>
+                    <div class="choice-item smoking-filter" data-area="난바" style="padding: 10px; font-size: 12px;">난바
+                    </div>
+                    <div class="choice-item smoking-filter" data-area="우메다" style="padding: 10px; font-size: 12px;">우메다
+                    </div>
+                    <div class="choice-item smoking-filter" data-area="신사이바시" style="padding: 10px; font-size: 12px;">
+                        신사이바시</div>
+                    <div class="choice-item smoking-filter" data-area="기타" style="padding: 10px; font-size: 12px;">기타
+                    </div>
+                </div>
+
+                <div class="smoking-grid" id="smoking-list-container"
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; max-height: 50vh; overflow-y: auto;">
+                    <!-- Smoking spots will be injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js?v=36"></script>
     <script>
         lucide.createIcons();
     </script>
