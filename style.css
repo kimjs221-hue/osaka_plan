@@ -700,6 +700,16 @@ section.active {
     padding: 20px;
     background: rgba(255, 255, 255, 0.02);
     border-radius: 24px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 20px;
+}
+
+.wc-vs-badge {
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--primary);
 }
 
 .spot-list-grid {
@@ -1172,7 +1182,7 @@ section.active {
     }
 
     /* Hide VS text to save space or make it small */
-    .vs-container>div:nth-child(2) {
+    .wc-vs-badge {
         margin: -10px 0;
         font-size: 16px;
         z-index: 10;
