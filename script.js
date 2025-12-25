@@ -1328,13 +1328,10 @@ function handleNativeMapClick(e, url) {
         const intentUrl = `intent://maps.google.com/maps?q=${encodedQuery}#Intent;scheme=geo;package=com.google.android.apps.maps;end`;
         window.location.href = intentUrl;
     } else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-        // iOS Scheme
+        // iOS Scheme - just try to open google maps
+        // If it fails, nothing happens (which is better than opening two apps)
+        // User can still use the web version on desktop/browser if they want
         window.location.href = `comgooglemaps://?q=${encodedQuery}`;
-
-        // Fallback for iOS
-        setTimeout(() => {
-            window.location.href = `https://maps.apple.com/?q=${encodedQuery}`;
-        }, 500);
     }
 }
 
