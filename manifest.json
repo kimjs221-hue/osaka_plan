@@ -1,0 +1,21 @@
+{
+    "name": "Osaka Plan",
+    "short_name": "OsakaPlan",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#0f0f0f",
+    "theme_color": "#ff0000",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "https://cdn-icons-png.flaticon.com/512/3966/3966904.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "https://cdn-icons-png.flaticon.com/512/3966/3966904.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
