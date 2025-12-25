@@ -1027,20 +1027,117 @@ section.active {
         font-size: 20px;
     }
 
+    .stat-info {
+        width: 100%;
+        /* Ensure full width for centering */
+        min-width: 0;
+        /* Flexbox text overflow fix */
+    }
+
     .stat-info h3 {
         font-size: 11px;
-        /* Further reduce font size to prevent wrapping */
         letter-spacing: -0.5px;
-        /* Tighten letter spacing */
+        white-space: nowrap;
+        /* Keep it single line */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%;
+        display: block;
+        /* Ensure it takes width */
+    }
+
+    /* Better wrapping for general text on mobile */
+    body {
+        word-break: keep-all;
+        /* Prevent breaking mid-word for Korean */
+        overflow-wrap: break-word;
+        /* Prevent overflow */
+    }
+
+    .info-card-item h4 {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: 100%;
-        line-height: 1.2;
+        font-size: 15px;
+        /* Slightly smaller title on mobile */
+    }
+
+    .card-info-row .val {
+        text-align: right;
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 60%;
+        /* Prevent value from pushing label too much */
     }
 
     .stat-info p {
         display: none;
+    }
+
+    /* Allow Neat Wrapping (Mobile) */
+    .card-tag-res,
+    .card-tag-hunting,
+    .card-category,
+    .card-tag-smoking,
+    .rating-badge {
+        white-space: normal !important;
+        /* Allow wrapping */
+        display: inline-flex !important;
+        align-items: center;
+        text-align: center;
+        line-height: 1.2 !important;
+        font-size: 10px !important;
+        padding: 3px 6px !important;
+        height: auto !important;
+        max-width: none !important;
+        /* Remove width limit */
+    }
+
+    /* Simplify Smoking Tag Layout */
+    .card-tag-smoking {
+        max-width: none !important;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    /* Nav Buttons & Filters - Responsive Text */
+    .nav-links li,
+    .filter-btn {
+        white-space: normal !important;
+        line-height: 1.1;
+        text-align: center;
+        word-break: keep-all;
+    }
+
+    /* Card Headers Layout - Allow wrapping naturally */
+    .card-header .tags {
+        display: flex;
+        flex-wrap: wrap !important;
+        /* Allow wrapping */
+        gap: 4px;
+        overflow: visible !important;
+    }
+
+    .info-card-item h4 {
+        margin-top: 8px;
+        font-size: 16px;
+        white-space: normal !important;
+        /* Allow wrap */
+        line-height: 1.3;
+        word-break: keep-all;
+    }
+
+    /* Dashboard Stats neat wrapping */
+    .stat-card h3,
+    .stat-info h3 {
+        white-space: normal !important;
+        font-size: 11px !important;
+        line-height: 1.25 !important;
+        word-break: keep-all;
+        height: auto;
     }
 
     /* Modal Mobile Optimization */
@@ -1048,7 +1145,6 @@ section.active {
     .modal {
         width: 100%;
         height: 100dvh;
-        /* Use dynamic viewport height */
         max-width: 100%;
         max-height: 100dvh;
         border-radius: 0;
