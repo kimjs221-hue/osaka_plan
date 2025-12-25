@@ -525,7 +525,7 @@ function generateCardHtml(item, type) {
             <p class="card-desc">${item.desc}</p>
             <div class="card-footer" style="margin-top:auto; display:flex; justify-content:space-between; align-items:center;">
                 ${type !== 'convenience' ? `<span class="area-tag" style="font-size:10px; color:var(--text-dim); text-transform:uppercase">📍 ${item.area}</span>` : '<span></span>'}
-                <a href="${mapUrl}" target="_blank" class="btn-map-sm" onclick="handleMapClick(event, '${mapUrl}')">
+                <a href="${mapUrl}" target="_blank" class="btn-map-sm" onclick="handleNativeMapClick(event, '${mapUrl}')">
                     <i data-lucide="map"></i> 구글맵
                 </a>
             </div>
@@ -1222,7 +1222,7 @@ function setupSmokingInfo() {
             <div class="wc-card-wrapper smoking-card" data-idx="${idx}" style="cursor:pointer;">
                 <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
                     <span class="card-tag-res" style="background:rgba(148,163,184,0.1); color:#94a3b8;">${s.area}</span>
-                    <a href="${s.map}" target="_blank" style="color:var(--secondary); font-size:12px; text-decoration:none;" onclick="handleMapClick(event, '${s.map}')"><i data-lucide="map"></i> 지도보기</a>
+                    <a href="${s.map}" target="_blank" style="color:var(--secondary); font-size:12px; text-decoration:none;" onclick="handleNativeMapClick(event, '${s.map}')"><i data-lucide="map"></i> 지도보기</a>
                 </div>
                 <h5 style="font-size:16px; margin-bottom:5px;">${s.name}</h5>
                 <p style="font-size:12px; color:var(--text-dim);">${s.desc}</p>
@@ -1277,6 +1277,63 @@ function handleMapClick(e, url) {
         // Fallback for iOS (if App not installed)
         setTimeout(() => {
             window.open(url, '_blank');
+        }, 500);
+    }
+}
+
+
+// --- IMPROVED Utility: Open Map in Native App (PWA Support) ---
+function handleNativeMapClick(e, url) {
+    e.stopPropagation(); // Prevent card click
+
+    // Detect Mobile
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (!isMobile) return; // Desktop: let default href work (target=_blank)
+
+    e.preventDefault();
+
+    let query = '';
+
+    // Extract query more robustly
+    try {
+        if (url.includes('query=')) {
+            const urlObj = new URL(url);
+            query = urlObj.searchParams.get('query');
+        } else if (url.includes('/maps/search/')) {
+            // Fallback for direct search urls
+            const parts = url.split('search/');
+            if (parts[1]) query = parts[1].split('?')[0];
+        }
+    } catch (err) {
+        console.warn('Map URL parse error', err);
+    }
+
+    // Double check encoding
+    if (query) {
+        try {
+            if (query.includes('%')) query = decodeURIComponent(query);
+        } catch (e) { }
+    }
+
+    if (!query) {
+        window.open(url, '_blank');
+        return;
+    }
+
+    const encodedQuery = encodeURIComponent(query);
+
+    // Native App Schemes
+    if (/Android/i.test(navigator.userAgent)) {
+        // Android Intent
+        const intentUrl = `intent://maps.google.com/maps?q=${encodedQuery}#Intent;scheme=geo;package=com.google.android.apps.maps;end`;
+        window.location.href = intentUrl;
+    } else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        // iOS Scheme
+        window.location.href = `comgooglemaps://?q=${encodedQuery}`;
+
+        // Fallback for iOS
+        setTimeout(() => {
+            window.location.href = `https://maps.apple.com/?q=${encodedQuery}`;
         }, 500);
     }
 }
