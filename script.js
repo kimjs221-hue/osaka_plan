@@ -509,11 +509,17 @@ function renderSection(sectionId) {
     if (map[sectionId]) map[sectionId]();
 }
 
+function normalizeArea(area) {
+    return area === 'nipponbashi' ? 'dendentown' : area;
+}
+
 function getFilteredData(type) {
     const f = state.filters[type];
     return state[type].filter(item => {
+        const normalizedFilterArea = normalizeArea(f.area);
+        const normalizedItemArea = normalizeArea(item.area);
         const matchSub = f.sub === 'all' || item.sub === f.sub;
-        const matchArea = f.area === 'all' || item.area === f.area;
+        const matchArea = normalizedFilterArea === 'all' || normalizedItemArea === normalizedFilterArea;
         return matchSub && matchArea;
     });
 }
@@ -830,7 +836,9 @@ function showRecommendations() {
         let score = 0;
 
         // 1. Area Match (High Priority)
-        if (recommendState.area === 'all' || item.area === recommendState.area) score += 50;
+        const normalizedRecommendArea = normalizeArea(recommendState.area);
+        const normalizedItemArea = normalizeArea(item.area);
+        if (normalizedRecommendArea === 'all' || normalizedItemArea === normalizedRecommendArea) score += 50;
 
         // 2. Time Match
         const t = recommendState.time;
@@ -1067,7 +1075,8 @@ function startWorldCup(config) {
     }
 
     if (config.area !== 'all') {
-        pool = pool.filter(i => i.area === config.area);
+        const normalizedConfigArea = normalizeArea(config.area);
+        pool = pool.filter(i => normalizeArea(i.area) === normalizedConfigArea);
     }
 
     // 월드컵은 고평점 위주로
