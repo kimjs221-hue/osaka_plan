@@ -12,7 +12,15 @@ let state = {
     },
     restaurants: [
         // --- Sushi & Kaisendon ---
-        { id: 101, name: '하루코마 스시', sub: 'sushi', area: 'tenma', time: '전철 20분', price: '2,000엔~', rating: 4.3, res: false, smoking: 'room', hours: '11:00-21:30 (화요일 휴무)', img: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=400&q=80', desc: '텐마 시장 가성비 No.1 스시 (흡연실 있음)' },
+        { id: 101, name: '하루코마 스시', sub: 'sushi', area: 'tenma', time: '전철 22분 (미도스지선 1회)', price: '1,000엔~', rating: 4.4, res: false, smoking: false, hours: '11:00-21:30', img: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=400&q=80', desc: '타베로그 3.7대, 오사카 가성비 스시 레전드', map: 'https://maps.google.com/?q=春駒寿司' },
+        { id: 901, name: '스시 사카바 사시스 난바', sub: 'sushi', area: 'namba', time: '도보 12분', price: '1,500엔~', rating: 4.2, res: false, smoking: false, hours: '11:00-23:00', menu: '참치 모둠 스시', desc: '난바 가성비 스시의 정석, 항상 붐비는 인기점', map: 'https://maps.google.com/?q=スシ酒場さしす+難波' },
+        { id: 902, name: '니기리즈시 스시카이 난바', sub: 'sushi', area: 'namba', time: '도보 10분', price: '1,300엔~', rating: 4.4, res: false, smoking: false, hours: '11:30-22:00', menu: '니기리 스시', desc: '도톤보리 근처에서 안정적인 평가 받는 가성비 스시', map: 'https://maps.google.com/?q=寿司海+難波' },
+        { id: 909, name: '스시노스케 닛폰바시', sub: 'sushi', area: 'dendentown', time: '전철 15분 (미도스지선 난바 → 도보)', price: '1,200엔~', rating: 4.3, res: false, smoking: false, hours: '11:00-22:00', menu: '니기리 스시', desc: '덴덴타운에서 가성비로 가장 안정적인 스시집', map: 'https://maps.google.com/?q=寿司之介+日本橋' },
+        { id: 910, name: '멘야 조우', sub: 'ramen', area: 'dendentown', time: '전철 18분 (미도스지선 → 사카이스지선)', price: '900엔~', rating: 4.2, res: false, smoking: false, hours: '11:30-22:00', menu: '닭 육수 라멘', desc: '덴덴타운 숨은 강자, 국물 완성도 높음', map: 'https://maps.google.com/?q=麺屋丈+日本橋' },
+        { id: 911, name: '라멘 무텐카', sub: 'ramen', area: 'dendentown', time: '전철 16분 (난바 → 닛폰바시)', price: '800엔~', rating: 4.1, res: false, smoking: false, hours: '11:00-21:00', menu: '쇼유 라멘', desc: '자극적이지 않은 정통 간장 라멘', map: 'https://maps.google.com/?q=ラーメン無天家+日本橋' },
+        { id: 912, name: '야키니쿠 라이크 닛폰바시', sub: 'yakiniku', area: 'dendentown', time: '전철 15분 (난바 → 도보)', price: '1,000엔~', rating: 4.0, res: false, smoking: false, hours: '11:00-23:00', menu: '혼밥 야키니쿠 세트', desc: '혼자 빠르게 먹기 좋은 가성비 야키니쿠', map: 'https://maps.google.com/?q=焼肉ライク+日本橋' },
+        { id: 913, name: '쿠시카츠 요코즈나 닛폰바시', sub: 'others', area: 'dendentown', time: '전철 17분 (미도스지선)', price: '900엔~', rating: 4.2, res: false, smoking: false, hours: '11:00-22:00', menu: '쿠시카츠 모둠', desc: '덴덴타운 근처에서 무난하게 먹기 좋은 쿠시카츠', map: 'https://maps.google.com/?q=串カツ横綱+日本橋' },
+        { id: 914, name: '타코야끼 타마야 닛폰바시', sub: 'others', area: 'dendentown', time: '전철 16분 (난바 → 닛폰바시)', price: '500엔~', rating: 4.1, res: false, smoking: false, hours: '10:30-20:00', menu: '타코야끼', desc: '현지인 위주, 소스 과하지 않은 스타일', map: 'https://maps.google.com/?q=たこ焼き+玉屋+日本橋' },
         { id: 102, name: '마루요시 스시', sub: 'sushi', area: 'namba', time: '도보 12분', price: '3,000엔~', rating: 4.5, res: true, hours: '06:00-13:00 (일요일 휴무)', img: 'https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=400&q=80', desc: '난바 위치, 셰프의 장인정신이 느껴지는 작은 명점' },
         { id: 103, name: '대기수산 회전초밥', sub: 'sushi', area: 'namba', time: '도보 5분', price: '1,500엔~', rating: 4.1, res: false, hours: '11:00-22:00', img: 'https://images.unsplash.com/photo-1583623025817-d180a2221d0a?auto=format&fit=crop&w=400&q=80', desc: '도톤보리 강변, 회전초밥 중 가장 신선한 퀄리티' },
         { id: 104, name: '스시 호시야마', sub: 'sushi', area: 'umeda', time: '전철 15분', price: '15,000엔~', rating: 4.6, res: true, hours: '17:30-23:00 (화요일 휴무)', img: 'https://images.unsplash.com/photo-1617196034183-421b4917c92d?auto=format&fit=crop&w=400&q=80', desc: '미슐랭 1스타, 우메다 지역 하이엔드 오마카세' },
@@ -68,6 +76,8 @@ let state = {
         { id: 133, name: '후쿠타로 본점', sub: 'okonomiyaki', area: 'namba', time: '도보 8분', price: '1,300엔~', rating: 4.4, res: false, smoking: true, hours: '평일 17:00-23:30 / 주말 12:00-23:30', img: 'https://images.unsplash.com/photo-1551024739-78e9d60c45ca?auto=format&fit=crop&w=400&q=80', desc: '난바 현지인 줄 서는 곳, 네기야키 추천 (흡연 가능)' },
         { id: 141, name: '북극성 (Hokkyokusei)', sub: 'others', area: 'namba', time: '도보 10분', price: '1,200엔~', rating: 4.2, res: false, hours: '11:30-21:30', img: 'https://images.unsplash.com/photo-1506084868730-34232f32f057?auto=format&fit=crop&w=400&q=80', desc: '오사카 오므라이스의 원조, 일본 가옥 분위기' },
         { id: 142, name: '쿠시카츠 다루마', sub: 'others', area: 'namba', time: '도보 5분', price: '2,000엔~', rating: 4.1, res: false, smoking: 'room', hours: '11:00-22:30', img: 'https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?auto=format&fit=crop&w=400&q=80', desc: '오사카 명물 꼬치 튀김 (분점마다 흡연실 완비)' },
+        { id: 903, name: '아카시야키 다코노테츠 도톤보리', sub: 'others', area: 'namba', time: '도보 10분', price: '700엔~', rating: 4.1, res: false, smoking: false, hours: '11:00-22:00', menu: '아카시야키', desc: '국물에 찍어먹는 정통 오사카식 타코야끼', map: 'https://maps.google.com/?q=たこの鉄+道頓堀' },
+        { id: 904, name: '타코야끼 와나카 센니치마에', sub: 'others', area: 'namba', time: '도보 13분', price: '600엔~', rating: 4.2, res: false, smoking: false, hours: '10:00-23:00', menu: '소스 타코야끼', desc: '관광지인데도 타베로그 점수 유지하는 타코야끼', map: 'https://maps.google.com/?q=わなか+千日前' },
         { id: 144, name: '메이지켄 (Meijiken)', sub: 'others', area: 'shinsaibashi', time: '도보 4분', price: '1,300엔~', rating: 4.2, res: false, smoking: 'room', hours: '11:00-22:00 (수요일 휴무, 브레이크 15:50-17:00)', img: 'https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=400&q=80', desc: '1925년 창업, 오므라이스 명점 (흡연실 있음)' },
         { id: 143, name: '텐동 마키노', sub: 'others', area: 'umeda', time: '전철 15분', price: '1,500엔~', rating: 4.4, res: false, hours: '10:30-23:00', img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=400&q=80', desc: '눈앞에서 튀겨주는 바삭한 텐동, 우메다 직장인들의 맛집' },
         { id: 176, name: '돈소쿠노 카도야', sub: 'izakaya', area: 'namba', time: '도보 10분', price: '2,000엔~', rating: 4.1, res: false, smoking: true, hours: '11:00-22:00 (화요일 휴무)', img: 'https://images.unsplash.com/photo-1529193591184-b1d58b3fffc9?auto=format&fit=crop&w=400&q=80', desc: '현지 아저씨들의 성지, 족발과 술 (흡연 매우 자유로움)' },
@@ -120,6 +130,12 @@ let state = {
         { id: 504, name: 'Chocolatier Palet D\'or', sub: 'cafe', area: 'umeda', time: '전철 15분', price: '2,500엔~', rating: 3.7, res: false, hours: '11:00-20:00', img: 'https://images.unsplash.com/photo-1548907602-02f6c6a76c1c?auto=format&fit=crop&w=400&q=80', desc: '초콜릿 장인의 숨결이 담긴 고품격 쇼콜라 디저트의 정점' },
         { id: 505, name: 'Creperie Alcyon', sub: 'cafe', area: 'namba', time: '도보 10분', price: '1,600엔~', rating: 3.7, res: false, hours: '11:30-21:30', img: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=400&q=80', desc: '난바 노포 크레이프 전문점, 타베로그 백명점 선정' },
         { id: 506, name: 'Rikuro Ojisan (리쿠로)', sub: 'bakery', area: 'namba', time: '도보 8분', price: '965엔~', rating: 3.6, res: false, hours: '09:00-20:00', img: 'https://images.unsplash.com/photo-1551404885-20af4ec8a236?auto=format&fit=crop&w=400&q=80', desc: '오사카 명물! 탱글탱글한 인생 치즈케이크 갓 구운 맛' },
+        { id: 905, name: '나카타니도', sub: 'traditional', area: 'namba', time: '도보 15분', price: '200엔~', rating: 4.3, res: false, smoking: false, hours: '10:00-19:00', menu: '요모기 모치', desc: '타베로그 3.6대, 난바 필수 디저트', map: 'https://maps.google.com/?q=中谷堂' },
+        { id: 906, name: '쿠로몬 미타라시 당고', sub: 'traditional', area: 'namba', time: '도보 14분', price: '300엔~', rating: 4.1, res: false, smoking: false, hours: '10:00-18:00', menu: '미타라시 당고', desc: '숯불향 강한 오사카식 당고', map: 'https://maps.google.com/?q=黒門市場+みたらし団子' },
+        { id: 907, name: '가리게트 오사카', sub: 'bakery', area: 'shinsaibashi', time: '도보 6분', price: '700엔~', rating: 4.3, res: false, smoking: false, hours: '11:00-20:00', menu: '밀푀유 아이스크림', desc: '겉바속차 + 아이스크림 조합으로 인기', map: 'https://maps.google.com/?q=GARIGUETTE+大阪' },
+        { id: 908, name: '홋카이도 소프트크림 신사이바시', sub: 'cafe', area: 'shinsaibashi', time: '도보 5분', price: '450엔~', rating: 4.0, res: false, smoking: false, hours: '11:00-22:00', menu: '밀크 소프트 아이스크림', desc: '진한 우유맛, 산책 중 하나 먹기 좋음', map: 'https://maps.google.com/?q=北海道ソフトクリーム+心斎橋' },
+        { id: 915, name: '미타라시 당고 야마모토', sub: 'traditional', area: 'dendentown', time: '전철 17분 (난바 → 도보)', price: '300엔~', rating: 4.0, res: false, smoking: false, hours: '10:00-18:00', menu: '미타라시 당고', desc: '덴덴타운 산책 중 가볍게 먹기 좋은 당고', map: 'https://maps.google.com/?q=みたらし団子+山本+日本橋' },
+        { id: 916, name: '소프트크림 스탠드 닛폰바시', sub: 'parfait', area: 'dendentown', time: '전철 16분 (난바 → 도보)', price: '400엔~', rating: 4.1, res: false, smoking: false, hours: '11:00-21:00', menu: '밀크 소프트 아이스크림', desc: '전자상가 구경하다 하나 먹기 좋은 소프트크림', map: 'https://maps.google.com/?q=ソフトクリーム+日本橋' },
         { id: 507, name: 'Cafe Annon', sub: 'cafe', area: 'namba', time: '도보 9분', price: '1,400엔~', rating: 3.8, res: false, hours: '11:00-23:00', img: 'https://images.unsplash.com/photo-1567620905732-2d1ec7bb7445?auto=format&fit=crop&w=400&q=80', desc: '폭신폭신 팬케이크와 조용한 분위기, 난바의 숨은 보석' },
         { id: 508, name: 'HARBS Daimaru Umeda', sub: 'bakery', area: 'umeda', time: '전철 15분', price: '1,000엔~', rating: 4.1, res: false, hours: '10:00-20:00', img: 'https://images.unsplash.com/photo-1535141192574-5d48bb7dbf11?auto=format&fit=crop&w=400&q=80', desc: '밀크 크레이프의 전설, 과일이 듬뿍 들어간 대형 케이크' },
         { id: 211, name: 'Saturdays NYC Surf', sub: 'cafe', area: 'shinsaibashi', time: '도보 5분', price: '600엔~', rating: 4.4, hours: '09:00-20:00', img: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=400&q=80', desc: '세련된 무드의 서프 샵 겸 카페, 라떼가 일품' },
@@ -578,7 +594,7 @@ function renderConvenience() {
 function updateDashboardUI() {
     const totalCount = state.restaurants.length + state.desserts.length + state.shopping.length + state.activities.length + state.bars.length + state.convenience.length;
     const el = document.getElementById('place-count');
-    if (el) el.textContent = `${totalCount}곳`;
+    if (el) el.textContent = `${totalCount}`;
 }
 
 function saveToLocalStorage() { localStorage.setItem('osaka_free_state_v56', JSON.stringify(state)); }
@@ -589,7 +605,13 @@ function loadFromLocalStorage() {
     for (const v of versions) {
         const saved = localStorage.getItem('osaka_free_state_' + v);
         if (saved) {
-            const parsed = JSON.parse(saved);
+            let parsed;
+            try {
+                parsed = JSON.parse(saved);
+            } catch (error) {
+                console.warn(`Failed to parse localStorage osaka_free_state_${v}`, error);
+                continue;
+            }
             const hasData = (parsed.restaurants && parsed.restaurants.length > 0) ||
                 (parsed.bars && parsed.bars.length > 0);
             if (hasData || v === 'v31') {
