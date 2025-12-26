@@ -578,7 +578,7 @@ function renderConvenience() {
 function updateDashboardUI() {
     const totalCount = state.restaurants.length + state.desserts.length + state.shopping.length + state.activities.length + state.bars.length + state.convenience.length;
     const el = document.getElementById('place-count');
-    if (el) el.textContent = `${totalCount}곳`;
+    if (el) el.textContent = `${totalCount}`;
 }
 
 function saveToLocalStorage() { localStorage.setItem('osaka_free_state_v56', JSON.stringify(state)); }
@@ -589,7 +589,13 @@ function loadFromLocalStorage() {
     for (const v of versions) {
         const saved = localStorage.getItem('osaka_free_state_' + v);
         if (saved) {
-            const parsed = JSON.parse(saved);
+            let parsed;
+            try {
+                parsed = JSON.parse(saved);
+            } catch (error) {
+                console.warn(`Failed to parse localStorage osaka_free_state_${v}`, error);
+                continue;
+            }
             const hasData = (parsed.restaurants && parsed.restaurants.length > 0) ||
                 (parsed.bars && parsed.bars.length > 0);
             if (hasData || v === 'v31') {
