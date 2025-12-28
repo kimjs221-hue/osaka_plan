@@ -134,16 +134,13 @@
                     <p id="section-desc">오사카 여행 계획 레츠고</p>
                 </div>
                 <div class="header-right">
-                    <button id="search-trigger" class="btn-icon" aria-label="검색">
-                        <i data-lucide="search"></i>
-                    </button>
-                    <!-- <button id="theme-toggle" class="btn-icon">
-                        <i data-lucide="moon"></i>
-                    </button> -->
                     <div class="trip-dates">
                         <i data-lucide="calendar-range"></i>
                         <span id="display-dates">2025-12-31 ~ 2026-01-04</span>
                     </div>
+                    <button id="search-trigger" class="btn-icon" aria-label="검색">
+                        <i data-lucide="search"></i>
+                    </button>
                 </div>
             </header>
 
@@ -151,6 +148,7 @@
             <div id="sections">
                 <!-- Dashboard Section -->
                 <section id="dashboard" class="active">
+                    <!-- Survival Japanese Quick Board -->
                     <div class="stats-grid">
                         <div class="stat-card clickable" id="start-recommend">
                             <i data-lucide="sparkles"></i>
@@ -187,24 +185,26 @@
                                 <p>오사카 매너 맵</p>
                             </div>
                         </div>
-                        <div class="stat-card clickable" id="start-travel-tips">
-                            <i data-lucide="lightbulb" style="color: #fbbf24;"></i>
+                        <div class="stat-card clickable" id="start-instapick">
+                            <i data-lucide="instagram" style="color: #f472b6;"></i>
                             <div class="stat-info">
-                                <h3>현지 꿀팁</h3>
-                                <p>여행 전문가 노하우</p>
+                                <h3>인스타픽</h3>
+                                <p>일본 인스타 핫플</p>
                             </div>
                         </div>
-                        <div class="stat-card clickable" id="start-phrasebook">
-                            <i data-lucide="languages" style="color: #60a5fa;"></i>
+                        <div class="stat-card clickable" id="start-newyear">
+                            <i data-lucide="calendar-days" style="color: #fbbf24;"></i>
                             <div class="stat-info">
-                                <h3>실전 일본어</h3>
-                                <p>바로 쓰는 핵심 회화</p>
+                                <h3>신년 가이드</h3>
+                                <p>12/31~1/4 생존팁</p>
                             </div>
                         </div>
+
                     </div>
 
                     <!-- New Dynamic Widgets -->
                     <div class="dashboard-widgets" style="margin-top: 24px;">
+                        <!-- Survival Japanese Quick Board (Relocated) -->
                         <div class="widget-card tip-widget"
                             style="background: rgba(30, 41, 59, 0.5); border-radius: 20px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 12px;">
                             <div class="tip-icon" style="font-size: 24px;">💡</div>
@@ -1097,12 +1097,64 @@
         </div>
     </div>
 
+    <!-- 신년 연휴 가이드 모달 -->
+    <div id="newyear-modal" class="modal-container hidden">
+        <div class="modal large">
+            <div class="modal-header">
+                <h4>🎍 신년 연휴 생존 & 이벤트 가이드</h4>
+                <button class="close-newyear"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body" style="padding: 20px;">
+                <div class="modal-filter-bar" id="newyear-filter">
+                    <button class="filter-btn active" data-category="survival">생존/팁</button>
+                    <button class="filter-btn" data-category="event">이벤트/참배</button>
+                    <button class="filter-btn" data-category="limited">편의점/한정</button>
+                </div>
+                <div id="newyear-container" class="tips-grid" style="display: grid; gap: 20px;">
+                    <!-- JS에서 동적 렌더링 -->
+                </div>
+                <div style="text-align: center; padding: 40px 20px;">
+                    <p style="font-size: 14px; color: var(--text-dim); margin-bottom: 10px;">일본의 '오쇼가츠' 연휴를 스마트하게 즐겨보세요.
+                    </p>
+                    <span style="font-size: 24px;">🍱⛩️🧧🏮✨</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 인스타픽 모달 -->
+    <div id="instapick-modal" class="modal-container hidden">
+        <div class="modal large">
+            <div class="modal-header">
+                <h4>🔥 인스타픽: 일본 핫플레이스</h4>
+                <button class="close-instapick"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body" style="padding: 20px;">
+                <div class="modal-filter-bar" id="instapick-filter">
+                    <button class="filter-btn active" data-category="all">전체</button>
+                    <button class="filter-btn" data-category="food">맛집/카페</button>
+                    <button class="filter-btn" data-category="night">클럽/술집</button>
+                    <button class="filter-btn" data-category="spot">명소/사진</button>
+                    <button class="filter-btn" data-category="shopping">쇼핑/꿀템</button>
+                </div>
+                <div id="instapick-container" class="tips-grid" style="display: grid; gap: 20px;">
+                    <!-- JS에서 동적 렌더링 -->
+                </div>
+                <div style="text-align: center; padding: 40px 20px;">
+                    <p style="font-size: 15px; color: var(--text-dim); margin-bottom: 25px; font-style: italic;">"가장
+                        트렌디한 오사카를 만나보세요."</p>
+                    <span style="font-size: 24px;">📸✨🔥🍡🥂</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 실전 일본어 사전 모달 -->
     <div id="phrasebook-modal" class="modal-container hidden">
         <div class="modal large">
             <div class="modal-header">
                 <h4>🗣️ 실전 술자리 & 헌팅 일본어</h4>
-
+                <button class="close-phrasebook"><i data-lucide="x"></i></button>
             </div>
             <div class="modal-body" style="padding: 20px;">
                 <!-- 필터 바 추가 -->
@@ -1152,6 +1204,14 @@
     <script>
         lucide.createIcons();
     </script>
+    <!-- Show to Clerk Modal (Fullscreen Large Text) -->
+    <div id="show-clerk-modal" class="modal hidden">
+        <div class="show-clerk-content">
+            <div id="clerk-text-jp" class="clerk-text-jp"></div>
+            <div id="clerk-text-ko" class="clerk-text-ko"></div>
+            <button class="close-clerk-btn">닫기</button>
+        </div>
+    </div>
 </body>
 
 </html>
