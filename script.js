@@ -2,6 +2,7 @@
 let state = {
     currentSection: 'dashboard',
     tripDates: { start: '2025-12-31', end: '2026-01-04' },
+    search: [], // Placeholder for search results
     filters: {
         restaurants: { sub: 'all', area: 'all', sorts: [] },
         desserts: { sub: 'all', area: 'all', sorts: [] },
@@ -13,11 +14,11 @@ let state = {
     userLocation: null,
     restaurants: [
         // --- Sushi & Kaisendon ---
-        { id: 101, name: '하루코마 스시', sub: 'sushi', area: 'tenma', time: '전철 20분', price: '2,000엔~', rating: 4.3, res: false, smoking: 'room', hours: '11:00-21:30 (화요일 휴무)', img: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=400&q=80', desc: '텐마 시장 가성비 No.1 스시 (흡연실 있음)' },
+        { id: 101, name: '하루코마 스시', sub: 'sushi', area: 'tenma', time: '전철 20분', price: '2,000엔~', rating: 4.3, res: false, smoking: 'room', waitLevel: 'high', hours: '11:00-21:30 (화요일 휴무)', img: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=400&q=80', desc: '텐마 시장 가성비 No.1 스시 (흡연실 있음)' },
         { id: 102, name: '마루요시 스시', sub: 'sushi', area: 'namba', time: '도보 12분', price: '3,000엔~', rating: 4.5, res: true, hours: '06:00-13:00 (일요일 휴무)', img: 'https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=400&q=80', desc: '난바 위치, 셰프의 장인정신이 느껴지는 작은 명점' },
-        { id: 103, name: '대기수산 회전초밥', sub: 'sushi', area: 'namba', time: '도보 5분', price: '1,500엔~', rating: 4.1, res: false, hours: '11:00-22:00', img: 'https://images.unsplash.com/photo-1583623025817-d180a2221d0a?auto=format&fit=crop&w=400&q=80', desc: '도톤보리 강변, 회전초밥 중 가장 신선한 퀄리티' },
-        { id: 104, name: '스시 호시야마', sub: 'sushi', area: 'umeda', time: '전철 15분', price: '15,000엔~', rating: 4.6, res: true, hours: '17:30-23:00 (화요일 휴무)', img: 'https://images.unsplash.com/photo-1617196034183-421b4917c92d?auto=format&fit=crop&w=400&q=80', desc: '미슐랭 1스타, 우메다 지역 하이엔드 오마카세' },
-        { id: 105, name: '원조 부치 초밥 어신', sub: 'sushi', area: 'shinsaibashi', time: '도보 8분', price: '2,000엔~', rating: 4.2, res: false, smoking: 'room', hours: '11:00-24:00', img: 'https://images.unsplash.com/photo-1591814468924-caf88d1232e1?auto=format&fit=crop&w=400&q=80', desc: '신사이바시 노포, 압도적인 크기의 네타가 특징 (흡연실 있음)' },
+        { id: 103, name: '대기수산 회전초밥', sub: 'sushi', area: 'namba', time: '도보 5분', price: '1,500엔~', rating: 4.1, res: false, waitLevel: 'medium', hours: '11:00-22:00', img: 'https://images.unsplash.com/photo-1583623025817-d180a2221d0a?auto=format&fit=crop&w=400&q=80', desc: '도톤보리 강변, 회전초밥 중 가장 신선한 퀄리티' },
+        { id: 104, name: '스시 호시야마', sub: 'sushi', area: 'kitashinchi', time: '전철 15분', price: '15,000엔~', rating: 4.6, res: true, localPick: true, waitLevel: 'high', hours: '17:30-23:00 (화요일 휴무)', img: 'https://images.unsplash.com/photo-1617196034183-421b4917c92d?auto=format&fit=crop&w=400&q=80', desc: '미슐랭 1스타, 기타신치 지역 하이엔드 오마카세' },
+        { id: 105, name: '원조 부치 초밥 어신', sub: 'sushi', area: 'shinsaibashi', time: '도보 8분', price: '2,000엔~', rating: 4.2, res: false, smoking: 'room', waitLevel: 'medium', hours: '11:00-24:00', img: 'https://images.unsplash.com/photo-1591814468924-caf88d1232e1?auto=format&fit=crop&w=400&q=80', desc: '신사이바시 노포, 압도적인 크기의 네타가 특징 (흡연실 있음)' },
 
         // --- Japanese Home Cooking (Teishoku) ---
         { id: 181, name: '이치후지 식당', sub: 'teishoku', area: 'tenma', time: '전철 18분', price: '1,000엔~', rating: 4.5, res: false, hours: '11:00-19:00 (일요일 휴무)', img: 'https://images.unsplash.com/photo-1547928576-a4a33237ecd0?auto=format&fit=crop&w=400&q=80', desc: '1959년 창업 노포. 니쿠스이와 폭신한 계란말이 정식이 일품' },
@@ -37,20 +38,20 @@ let state = {
         { id: 191, name: '우오야 히데조 타치노미', sub: 'sushi', area: 'namba', time: '도보 10분', price: '2,000엔~', rating: 4.4, res: false, smoking: true, hours: '17:00-24:00', img: 'https://images.unsplash.com/photo-1550966842-2b667e41f021?auto=format&fit=crop&w=400&q=80', desc: '우라난바의 서서 먹는 스시, 신선하고 저렴함 (좌석 흡연 가능)' },
 
         // --- Tonkatsu & Kyukatsu ---
-        { id: 151, name: '규카츠 모토무라 난바', sub: 'katsu', area: 'namba', time: '도보 6분', price: '1,400엔~', rating: 4.7, res: false, hours: '11:00-22:00', img: 'https://images.unsplash.com/photo-1621919030800-474c76743936?auto=format&fit=crop&w=400&q=80', desc: '화로에 구워 먹는 규카츠' },
+        { id: 151, name: '규카츠 모토무라 난바', sub: 'katsu', area: 'namba', time: '도보 6분', price: '1,400엔~', rating: 4.7, res: false, waitLevel: 'high', hours: '11:00-22:00', img: 'https://images.unsplash.com/photo-1621919030800-474c76743936?auto=format&fit=crop&w=400&q=80', desc: '화로에 구워 먹는 규카츠' },
         { id: 152, name: '규카츠 토미타', sub: 'katsu', area: 'namba', time: '도보 8분', price: '1,300엔~', rating: 4.5, res: false, hours: '11:00-21:00', img: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=400&q=80', desc: '현지인 숨은 규카츠 맛집' },
         { id: 153, name: '뉴베이브 토요사키', sub: 'katsu', area: 'umeda', time: '전철 18분', price: '2,000엔~', rating: 4.6, res: false, hours: '11:00-15:00 / 17:30-19:30 (부정기 휴무)', img: 'https://images.unsplash.com/photo-1614750914812-7825488133ef?auto=format&fit=crop&w=400&q=80', desc: '육즙 폭발 핑크빛 돈카츠' },
         { id: 154, name: 'KYK 돈카츠 우메다', sub: 'katsu', area: 'umeda', time: '전철 15분', price: '1,500엔~', rating: 4.2, res: false, hours: '11:00-22:00', img: 'https://images.unsplash.com/photo-1616031024479-563630f9d92e?auto=format&fit=crop&w=400&q=80', desc: '오사카 대표 노포 돈카츠' },
         { id: 155, name: 'Epais (에페)', sub: 'katsu', area: 'umeda', time: '전철 16분', price: '1,800엔~', rating: 4.5, res: true, hours: '11:00-15:00 / 18:00-22:00 (일요일 휴무)', img: 'https://images.unsplash.com/photo-1544601284-8258ef29549f?auto=format&fit=crop&w=400&q=80', desc: '미슐랭 빕구르망 프리미엄 돈카츠' },
 
         // --- Udon & Soba ---
-        { id: 161, name: '도톤보리 이마이', sub: 'udon', area: 'namba', time: '도보 4분', price: '800엔~', rating: 4.3, res: false, hours: '11:30-21:30 (수요일 휴무)', img: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=400&q=80', desc: '오사카 우동의 상징, 담백한 육수와 유부가 일품' },
-        { id: 162, name: '카마타케 우동', sub: 'udon', area: 'namba', time: '도보 8분', price: '900엔~', rating: 4.4, res: false, hours: '11:00-16:00 (화요일 휴무)', img: 'https://images.unsplash.com/photo-1618842676088-c4d48a6a7c9d?auto=format&fit=crop&w=400&q=80', desc: '국물 없는 붓카케 우동의 성지, 쫄깃한 면발' },
-        { id: 163, name: '츠루톤탄 소에몬초점', sub: 'udon', area: 'namba', time: '도보 6분', price: '1,200엔~', rating: 4.1, res: false, hours: '11:00-익일 08:00', img: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=400&q=80', desc: '세숫대야 우동, 명란 크림 우동 등 퓨전 메뉴가 인기' },
+        { id: 161, name: '도톤보리 이마이', sub: 'udon', area: 'namba', time: '도보 4분', price: '800엔~', rating: 4.3, res: false, waitLevel: 'medium', hours: '11:30-21:30 (수요일 휴무)', img: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=400&q=80', desc: '오사카 우동의 상징, 담백한 육수와 유부가 일품' },
+        { id: 162, name: '카마타케 우동', sub: 'udon', area: 'namba', time: '도보 8분', price: '900엔~', rating: 4.4, res: false, waitLevel: 'medium', hours: '11:00-16:00 (화요일 휴무)', img: 'https://images.unsplash.com/photo-1618842676088-c4d48a6a7c9d?auto=format&fit=crop&w=400&q=80', desc: '국물 없는 붓카케 우동의 성지, 쫄깃한 면발' },
+        { id: 163, name: '츠루톤탄 소에몬초점', sub: 'udon', area: 'namba', time: '도보 6분', price: '1,200엔~', rating: 4.1, res: false, waitLevel: 'high', hours: '11:00-익일 08:00', img: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=400&q=80', desc: '세숫대야 우동, 명란 크림 우동 등 퓨전 메뉴가 인기' },
         { id: 164, name: '우동야 키스케', sub: 'udon', area: 'umeda', time: '전철 16분', price: '1,000엔~', rating: 4.5, res: false, hours: '12:00-16:00 / 18:00-20:00 (화요일 휴무)', img: 'https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=400&q=80', desc: '미슐랭 빕구르망, 텐푸라와 냉우동의 조화가 환상적' },
 
         // --- Ramen ---
-        { id: 111, name: '이치란 라멘 도톤보리', sub: 'ramen', area: 'namba', time: '도보 6분', price: '1,100엔', rating: 4.3, res: false, hours: '24시간 영업', img: 'https://images.unsplash.com/photo-1552611052-d59a0d9741bc?auto=format&fit=crop&w=400&q=80', desc: '말이 필요 없는 오사카 1순위 돈코츠 라멘' },
+        { id: 111, name: '이치란 라멘 도톤보리', sub: 'ramen', area: 'namba', time: '도보 6분', price: '1,100엔', rating: 4.3, res: false, waitLevel: 'high', hours: '24시간 영업', img: 'https://images.unsplash.com/photo-1552611052-d59a0d9741bc?auto=format&fit=crop&w=400&q=80', desc: '말이 필요 없는 오사카 1순위 돈코츠 라멘' },
         { id: 112, name: '카무쿠라 라멘', sub: 'ramen', area: 'namba', time: '도보 8분', price: '900엔', rating: 4.1, res: false, hours: '10:00-익일 07:30', img: 'https://images.unsplash.com/photo-1591814468924-caf88d1232e1?auto=format&fit=crop&w=400&q=80', desc: '배추의 단맛이 우러난 깊고 깔끔한 채수 라멘' },
         { id: 113, name: '라멘 인생 JET', sub: 'ramen', area: 'umeda', time: '전철 18분', price: '1,000엔', rating: 4.4, res: false, hours: '11:00-15:00 / 18:00-23:00', img: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=400&q=80', desc: '후쿠시마 격전지 1위, 진한 토리파이탄(닭백탕)의 정석' },
         { id: 114, name: '무기토 멘스케', sub: 'ramen', area: 'umeda', time: '전철 15분', price: '1,200엔', rating: 4.5, res: false, hours: '11:00-15:30 (화요일 휴무)', img: 'https://images.unsplash.com/photo-1591814468924-caf88d1232e1?auto=format&fit=crop&w=400&q=80', desc: '미슐랭 등재, 중화소바의 극치를 보여주는 우메다 명소' },
@@ -69,38 +70,44 @@ let state = {
         { id: 1212, name: '야키니쿠 키타하마', sub: 'yakiniku', area: 'umeda', time: '전철 12분', price: '8,000엔~', rating: 4.5, res: true, smoking: 'room', hours: '17:00-23:00', desc: '기타하마의 뷰와 함께 즐기는 최상급 흑우 코스' },
 
         // --- Unagi (Eel) & Special ---
-        { id: 1220, name: '이즈모 (Izumo) 루쿠아', sub: 'teishoku', area: 'umeda', time: '전철 15분', price: '2,500엔~', rating: 4.2, res: false, hours: '11:00-23:00', desc: '압도적인 비주얼의 산더미 장어덮밥, 루쿠아 지하 맛집' },
-        { id: 1221, name: '혼케 시바토 (Shibato)', sub: 'teishoku', area: 'umeda', time: '전철 13분', price: '5,000엔~', rating: 4.4, res: true, hours: '11:00-21:00', desc: '300년 전통, 오사카에서 가장 오래된 장어 요리 명가' },
-        { id: 1222, name: '요시토라 (Yoshitora)', sub: 'teishoku', area: 'shinsaibashi', time: '도보 15분 (혼마치)', price: '6,000엔~', rating: 4.6, res: true, hours: '11:00-20:00', desc: '미슐랭 가이드 등재, 에도 시대 방식의 부드러운 장어' },
-        { id: 1223, name: '우나토토 (Una-Toto) 난바', sub: 'teishoku', area: 'namba', time: '도보 6분', price: '1,100엔', rating: 3.9, res: false, hours: '11:00-22:00', desc: '장어덮밥을 1,100엔에? 가성비 최강의 장어 패스트푸드' },
+        { id: 1220, name: '이즈모 (Izumo) 루쿠아', sub: 'eel', area: 'umeda', time: '전철 15분', price: '2,500엔~', rating: 4.2, res: false, hours: '11:00-23:00', desc: '압도적인 비주얼의 산더미 장어덮밥, 루쿠아 지하 맛집' },
+        { id: 1221, name: '혼케 시바토 (Shibato)', sub: 'eel', area: 'umeda', time: '전철 13분', price: '5,000엔~', rating: 4.4, res: true, hours: '11:00-21:00', desc: '300년 전통, 오사카에서 가장 오래된 장어 요리 명가' },
+        { id: 1222, name: '요시토라 (Yoshitora)', sub: 'eel', area: 'shinsaibashi', time: '도보 15분 (혼마치)', price: '6,000엔~', rating: 4.6, res: true, hours: '11:00-20:00', desc: '미슐랭 가이드 등재, 에도 시대 방식의 부드러운 장어' },
+        { id: 1223, name: '우나토토 (Una-Toto) 난바', sub: 'eel', area: 'namba', time: '도보 6분', price: '1,100엔', rating: 3.9, res: false, hours: '11:00-22:00', desc: '장어덮밥을 1,100엔에? 가성비 최강의 장어 패스트푸드' },
 
         // --- Deep Horumon ---
         { id: 1230, name: '류노스 (Ryu no Su) 신사이바시', sub: 'yakiniku', area: 'shinsaibashi', time: '도보 5분', price: '1,500엔~', rating: 4.3, res: false, smoking: true, hours: '11:00-06:00', desc: '오사카 명물 아부라카스(튀긴 곱창) 우동과 호르몬 구이 (24시급 운영)' },
         { id: 1231, name: '쇼와 타이슈 호르몬', sub: 'yakiniku', area: 'namba', time: '도보 4분', price: '3,000엔~', rating: 4.0, res: false, smoking: true, hours: '17:00-24:00', desc: '도톤보리 한복판, 쇼와 시대 레트로 감성의 호르몬 전문점' },
 
         // --- Izakaya & Others ---
-        { id: 131, name: '미즈노 오코노미야키', sub: 'okonomiyaki', area: 'namba', time: '도보 6분', price: '1,800엔~', rating: 4.3, res: false, smoking: 'room', hours: '11:00-22:00 (목요일 휴무)', img: 'https://images.unsplash.com/photo-1617343255141-754da01f2e14?auto=format&fit=crop&w=400&q=80', desc: '미슐랭 빕구르망, 마 가루 오코노미야키 (흡연실 있음)' },
-        { id: 133, name: '후쿠타로 본점', sub: 'okonomiyaki', area: 'namba', time: '도보 8분', price: '1,300엔~', rating: 4.4, res: false, smoking: true, hours: '평일 17:00-23:30 / 주말 12:00-23:30', img: 'https://images.unsplash.com/photo-1551024739-78e9d60c45ca?auto=format&fit=crop&w=400&q=80', desc: '난바 현지인 줄 서는 곳, 네기야키 추천 (흡연 가능)' },
-        { id: 141, name: '북극성 (Hokkyokusei)', sub: 'others', area: 'namba', time: '도보 10분', price: '1,200엔~', rating: 4.2, res: false, hours: '11:30-21:30', img: 'https://images.unsplash.com/photo-1506084868730-34232f32f057?auto=format&fit=crop&w=400&q=80', desc: '오사카 오므라이스의 원조, 일본 가옥 분위기' },
-        { id: 142, name: '쿠시카츠 다루마', sub: 'others', area: 'namba', time: '도보 5분', price: '2,000엔~', rating: 4.1, res: false, smoking: 'room', hours: '11:00-22:30', img: 'https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?auto=format&fit=crop&w=400&q=80', desc: '오사카 명물 꼬치 튀김 (분점마다 흡연실 완비)' },
-        { id: 144, name: '메이지켄 (Meijiken)', sub: 'others', area: 'shinsaibashi', time: '도보 4분', price: '1,300엔~', rating: 4.2, res: false, smoking: 'room', hours: '11:00-22:00 (수요일 휴무, 브레이크 15:50-17:00)', img: 'https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=400&q=80', desc: '1925년 창업, 오므라이스 명점 (흡연실 있음)' },
+        { id: 131, name: '미즈노 오코노미야키', sub: 'okonomiyaki', area: 'namba', time: '도보 6분', price: '1,800엔~', rating: 4.3, res: false, smoking: 'room', waitLevel: 'high', hours: '11:00-22:00 (목요일 휴무)', img: 'https://images.unsplash.com/photo-1617343255141-754da01f2e14?auto=format&fit=crop&w=400&q=80', desc: '미슐랭 빕구르망, 마 가루 오코노미야키 (흡연실 있음)' },
+        { id: 133, name: '후쿠타로 본점', sub: 'okonomiyaki', area: 'namba', time: '도보 8분', price: '1,300엔~', rating: 4.4, res: false, smoking: true, waitLevel: 'high', hours: '평일 17:00-23:30 / 주말 12:00-23:30', img: 'https://images.unsplash.com/photo-1551024739-78e9d60c45ca?auto=format&fit=crop&w=400&q=80', desc: '난바 현지인 줄 서는 곳, 네기야키 추천 (흡연 가능)' },
+        { id: 141, name: '북극성 (Hokkyokusei)', sub: 'western', area: 'namba', time: '도보 10분', price: '1,200엔~', rating: 4.2, res: false, hours: '11:30-21:30', img: 'https://images.unsplash.com/photo-1506084868730-34232f32f057?auto=format&fit=crop&w=400&q=80', desc: '오사카 오므라이스의 원조, 일본 가옥 분위기' },
+        { id: 142, name: '쿠시카츠 다루마', sub: 'kushikatsu', area: 'namba', time: '도보 5분', price: '2,000엔~', rating: 4.1, res: false, smoking: 'room', hours: '11:00-22:30', img: 'https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?auto=format&fit=crop&w=400&q=80', desc: '오사카 명물 꼬치 튀김 (분점마다 흡연실 완비)' },
+        { id: 144, name: '메이지켄 (Meijiken)', sub: 'western', area: 'shinsaibashi', time: '도보 4분', price: '1,300엔~', rating: 4.2, res: false, smoking: 'room', hours: '11:00-22:00 (수요일 휴무, 브레이크 15:50-17:00)', img: 'https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&w=400&q=80', desc: '1925년 창업, 오므라이스 명점 (흡연실 있음)' },
         { id: 143, name: '텐동 마키노', sub: 'others', area: 'umeda', time: '전철 15분', price: '1,500엔~', rating: 4.4, res: false, hours: '10:30-23:00', img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=400&q=80', desc: '눈앞에서 튀겨주는 바삭한 텐동, 우메다 직장인들의 맛집' },
         { id: 176, name: '돈소쿠노 카도야', sub: 'izakaya', area: 'namba', time: '도보 10분', price: '2,000엔~', rating: 4.1, res: false, smoking: true, hours: '11:00-22:00 (화요일 휴무)', img: 'https://images.unsplash.com/photo-1529193591184-b1d58b3fffc9?auto=format&fit=crop&w=400&q=80', desc: '현지 아저씨들의 성지, 족발과 술 (흡연 매우 자유로움)' },
-        { id: 134, name: '호젠지 산페이', sub: 'okonomiyaki', area: 'namba', time: '도보 8분', price: '1,500엔~', rating: 4.4, res: false, smoking: true, hours: '17:00-23:00 (화요일 휴무)', desc: '호젠지 요코초의 정취 (흡연 가능)' },
-        { id: 135, name: '아지노야', sub: 'okonomiyaki', area: 'namba', time: '도보 6분', price: '1,400엔~', rating: 4.6, res: false, smoking: 'room', hours: '11:00-22:00 (월요일 휴무)', desc: '도톤보리 최고의 오코노미야키 (흡연 전용실 완비)' },
+        { id: 134, name: '호젠지 산페이', sub: 'okonomiyaki', area: 'namba', time: '도보 8분', price: '1,500엔~', rating: 4.4, res: false, smoking: true, waitLevel: 'high', hours: '17:00-23:00 (화요일 휴무)', desc: '호젠지 요코초의 정취 (흡연 가능)' },
+        { id: 135, name: '아지노야', sub: 'okonomiyaki', area: 'namba', time: '도보 6분', price: '1,400엔~', rating: 4.6, res: false, smoking: 'room', waitLevel: 'high', hours: '11:00-22:00 (월요일 휴무)', desc: '도톤보리 최고의 오코노미야키 (흡연 전용실 완비)' },
         { id: 116, name: '면야 조로쿠', sub: 'ramen', area: 'namba', time: '도보 10분', price: '1,000엔', rating: 4.5, res: false, hours: '11:30-15:00 / 18:00-21:00 (화요일 휴무)', desc: '오사카 타베로그 라면 부문 부동의 1위 명점' },
         { id: 117, name: '라멘 야시치', sub: 'ramen', area: 'umeda', time: '전철 15분', price: '1,100엔', rating: 4.7, res: false, hours: '10:30-16:00 (토/일 휴무)', desc: '평일에만 맛볼 수 있는 환상의 닭 육수 라멘' },
-        { id: 136, name: '치보 (Chibo)', sub: 'okonomiyaki', area: 'namba', time: '도보 5분', price: '1,500엔~', rating: 4.1, res: false, smoking: 'room', hours: '11:00-23:00', desc: '고급스러운 분위기의 오코노미야키 (별도 흡연실 있음)' },
+        { id: 136, name: '치보 (Chibo)', sub: 'okonomiyaki', area: 'namba', time: '도보 5분', price: '1,500엔~', rating: 4.1, res: false, smoking: 'room', waitLevel: 'medium', hours: '11:00-23:00', desc: '고급스러운 분위기의 오코노미야키 (별도 흡연실 있음)' },
         { id: 128, name: '야키니쿠노 와타미 난바점', sub: 'yakiniku', area: 'namba', time: '도보 5분', price: '3,000엔~', rating: 3.8, res: false, smoking: 'room', hours: '11:30-23:00', desc: '가성비 90분 무제한 코스 (실내 흡연실 완비)' },
         { id: 129, name: '야키니쿠 코코카라 난바점', sub: 'yakiniku', area: 'namba', time: '도보 8분', price: '3,500엔~', rating: 4.2, res: false, smoking: true, hours: '17:00-익일 02:00', desc: '두툼한 안창살과 호르몬 (좌석 흡연 가능)' },
         { id: 130, name: '야키니쿠 리키마루 난바점', sub: 'yakiniku', area: 'namba', time: '도보 6분', price: '3,500엔~', rating: 4.1, res: false, smoking: 'room', hours: '11:30-23:00', desc: '냉장 숙성 고기 무제한 (개별 흡연실 완비)' },
         { id: 131, name: '쿠로노 우라난바 본점', sub: 'yakiniku', area: 'namba', time: '도보 10분', price: '4,000엔~', rating: 4.4, res: true, smoking: true, hours: '16:00-24:00', desc: '흑모 와규 파격가 제공 (좌석 흡연 가능)' },
         { id: 137, name: '야키니쿠 마이도', sub: 'yakiniku', area: 'namba', time: '도보 5분', price: '3,500엔~', rating: 4.0, res: false, smoking: true, hours: '17:00-23:00', desc: '와규 무한리필 플랜 (흡연 가능)' },
 
+        // --- Kitashinchi & High-end ---
+        { id: 1501, name: '기타신치 산도 (Kitashinchi Sando)', sub: 'others', area: 'kitashinchi', time: '전철 15분', price: '3,000엔~', rating: 4.8, localPick: true, waitLevel: 'medium', hours: '18:00-04:00', desc: '심야에 즐기는 프리미엄 가츠산도와 타마고산도. 기타신치 대표 명물' },
+        { id: 1502, name: '스테이크 미소노 (Misono)', sub: 'teppanyaki', area: 'kitashinchi', time: '전철 16분', price: '15,000엔~', rating: 4.7, localPick: true, waitLevel: 'high', hours: '11:30-22:00', desc: '철판구이의 원조. 최상급 고베규를 눈앞에서 구워주는 럭셔리 다이닝' },
+        { id: 1503, name: '하나타코 (Hanatako)', sub: 'oden', area: 'umeda', time: '전철 15분', price: '1,000엔~', rating: 4.6, waitLevel: 'high', hours: '10:00-22:00', desc: '우메다 신우메다 식당가 위치. 타코야키도 유명하지만 겨울철 오뎅도 필수' },
+        { id: 1504, name: '타코우메 (Takoume)', sub: 'oden', area: 'namba', time: '도보 5분', price: '2,000엔~', rating: 4.5, localPick: true, waitLevel: 'medium', hours: '16:00-23:00', desc: '1844년 창업, 일본에서 가장 오래된 오뎅집. 도톤보리의 전설적인 노포' },
+
         // --- Breakfast & Late Night ---
         { id: 145, name: '마루후쿠 커피점 (본점)', sub: 'others', area: 'namba', time: '도보 10분', price: '700엔~', rating: 4.1, smoking: true, hours: '08:00-23:00', desc: '1934년 창업, 오사카를 대표하는 정통 킷사텐. 클래식한 모닝 세트 추천 (흡연 가능)' },
-        { id: 146, name: '킨류 라멘 (도톤보리)', sub: 'ramen', area: 'namba', time: '도보 5분', price: '800엔~', rating: 3.8, hours: '24시간 영업', desc: '도톤보리의 마스코트. 24시간 언제든 먹을 수 있는 서서 먹는 라멘의 낭만' },
-        { id: 147, name: '이치란 라면 도톤보리점', sub: 'ramen', area: 'namba', time: '도보 6분', price: '1,100엔~', rating: 4.3, hours: '24시간 영업', desc: '말이 필요 없는 명소. 취향대로 커스텀하는 나만의 라멘 (24시간)' },
+        { id: 146, name: '킨류 라멘 (도톤보리)', sub: 'ramen', area: 'namba', time: '도보 5분', price: '800엔~', rating: 3.8, waitLevel: 'medium', hours: '24시간 영업', desc: '도톤보리의 마스코트. 24시간 언제든 먹을 수 있는 서서 먹는 라멘의 낭만' },
+        { id: 147, name: '이치란 라면 도톤보리점', sub: 'ramen', area: 'namba', time: '도보 6분', price: '1,100엔~', rating: 4.3, waitLevel: 'high', hours: '24시간 영업', desc: '말이 필요 없는 명소. 취향대로 커스텀하는 나만의 라멘 (24시간)' },
         { id: 148, name: '산토리 바 원 (Suntory Bar)', sub: 'others', area: 'namba', time: '도보 8분', price: '1,000엔~', rating: 4.5, smoking: true, hours: '18:00-익일 04:00', desc: '심야에 조용히 위스키 한 잔 즐기기 좋은 정통 바 (흡연 가능)' },
         { id: 149, name: '쿠로몬 시장 (아침 먹거리)', sub: 'others', area: 'namba', time: '도보 12분', price: '500엔~', rating: 4.2, hours: '09:00-18:00', desc: '오사카의 부엌. 아침 일찍 들러 신선한 우니와 해산물을 맛볼 수 있는 곳' },
         { id: 150, name: '나카우 (Nakau) 난바점', sub: 'teishoku', area: 'namba', time: '도보 5분', price: '400엔~', rating: 3.9, hours: '24시간 영업', desc: '저렴하고 든든한 24시간 규동 및 우동 체인. 아침 식사로 최고' },
@@ -129,14 +136,14 @@ let state = {
         { id: 702, name: '소주한잔 오사카1호점', sub: 'izakaya', area: 'shinsaibashi', time: '도보 8분', price: '3,000엔~', rating: 4.2, res: false, smoking: 'room', hours: '17:00-익일 05:00 (일 휴무)', desc: '임창정의 소주한잔 오사카 상륙! (실내 흡연 구역 존재)' },
 
         // --- Added: Takoyaki & Snacks (Tabelog High Rating) ---
-        { id: 901, name: '타코야키 도라쿠 와나카', sub: 'snack', area: 'namba', time: '도보 5분', price: '500엔~', rating: 4.4, hours: '10:00-22:00', desc: '오사카 타코야키의 표준! 겉은 바삭하고 속은 폭신한 정석의 맛 (타베로그 3.6+)' },
-        { id: 902, name: '아베노 타코야키 야마찬', sub: 'snack', area: 'others', time: '전철 15분', price: '500엔~', rating: 4.5, hours: '11:00-23:00', desc: '반죽에 진한 육수 맛이 배어있어 소금만 뿌려 먹어도 맛있는 명점 (타베로그 3.7+)' },
-        { id: 903, name: '타코야키 코가류', sub: 'snack', area: 'shinsaibashi', time: '도보 5분', price: '500엔~', rating: 4.3, hours: '11:00-20:00', desc: '아메리카무라의 상징, 과일 소스와 특제 마요네즈의 환상 궁합 (타베로그 3.5+)' },
-        { id: 904, name: '하나다코', sub: 'snack', area: 'umeda', time: '전철 15분', price: '600엔~', rating: 4.7, hours: '10:00-22:00', desc: '우메다 줄 서는 맛집, 산더미처럼 쌓아주는 파(네기마요)가 일품 (타베로그 3.7+)' },
-        { id: 905, name: '타코야키 아이즈야', sub: 'snack', area: 'namba', time: '도보 10분', price: '500엔~', rating: 4.2, hours: '10:00-22:00', desc: '타코야키의 원조! 소스 없이 한입에 쏙 들어가는 깊은 감칠맛 (타베로그 3.5+)' },
+        { id: 901, name: '타코야키 도라쿠 와나카', sub: 'snack', area: 'namba', time: '도보 5분', price: '500엔~', rating: 4.4, waitLevel: 'high', hours: '10:00-22:00', desc: '오사카 타코야키의 표준! 겉은 바삭하고 속은 폭신한 정석의 맛 (타베로그 3.6+)' },
+        { id: 902, name: '아베노 타코야키 야마찬', sub: 'snack', area: 'others', time: '전철 15분', price: '500엔~', rating: 4.5, waitLevel: 'high', hours: '11:00-23:00', desc: '반죽에 진한 육수 맛이 배어있어 소금만 뿌려 먹어도 맛있는 명점 (타베로그 3.7+)' },
+        { id: 903, name: '타코야키 코가류', sub: 'snack', area: 'shinsaibashi', time: '도보 5분', price: '500엔~', rating: 4.3, waitLevel: 'high', hours: '11:00-20:00', desc: '아메리카무라의 상징, 과일 소스와 특제 마요네즈의 환상 궁합 (타베로그 3.5+)' },
+        { id: 904, name: '하나다코', sub: 'snack', area: 'umeda', time: '전철 15분', price: '600엔~', rating: 4.7, waitLevel: 'high', hours: '10:00-22:00', desc: '우메다 줄 서는 맛집, 산더미처럼 쌓아주는 파(네기마요)가 일품 (타베로그 3.7+)' },
+        { id: 905, name: '타코야키 아이즈야', sub: 'snack', area: 'namba', time: '도보 10분', price: '500엔~', rating: 4.2, waitLevel: 'medium', hours: '10:00-22:00', desc: '타코야키의 원조! 소스 없이 한입에 쏙 들어가는 깊은 감칠맛 (타베로그 3.5+)' },
 
         // --- Added: Nipponbashi Area Gems ---
-        { id: 906, name: '텐치진 니혼바시점', sub: 'ramen', area: 'nipponbashi', time: '도보 3분', price: '1,000엔~', rating: 4.3, hours: '11:00-03:00', desc: '숯불 향 가득한 돼지고기 덮밥(부타동)과 진한 라멘의 환상 조화' },
+        { id: 906, name: '텐치진 니혼바시점', sub: 'ramen', area: 'nipponbashi', time: '도보 3분', price: '1,000엔~', rating: 4.3, waitLevel: 'medium', hours: '11:00-03:00', desc: '숯불 향 가득한 돼지고기 덮밥(부타동)과 진한 라멘의 환상 조화' },
         { id: 907, name: '텐푸라 타로지로', sub: 'others', area: 'nipponbashi', time: '도보 5분', price: '1,500엔~', rating: 4.4, hours: '11:00-21:00', desc: '눈앞에서 튀겨주는 바삭하고 깔끔한 가성비 텐푸라 정식' },
         { id: 908, name: '중화소바 마사니', sub: 'ramen', area: 'nipponbashi', time: '도보 4분', price: '1,000엔~', rating: 4.5, hours: '11:00-22:00', desc: '깔끔하고 깊은 간장 육수로 사랑받는 구로몬 시장 인근 라멘 맛집' },
         { id: 909, name: '야키니쿠 츠루규', sub: 'yakiniku', area: 'nipponbashi', time: '도보 6분', price: '4,000엔~', rating: 4.4, res: true, hours: '17:00-24:00', desc: '닛폰바시 현지인들이 아끼는 고퀄리티 가성비 와규 야키니쿠' },
@@ -146,8 +153,29 @@ let state = {
 
         // --- Added: Affordable & High-Quality Sushi ---
         { id: 911, name: '카메스시 총본점', sub: 'sushi', area: 'umeda', time: '전철 15분', price: '2,000엔~', rating: 4.7, hours: '11:30-22:30', desc: '우메다의 전설! 두툼한 네타와 최고의 가성비로 줄 서서 먹는 곳' },
-        { id: 912, name: '스시마사 총본점', sub: 'sushi', area: 'tenma', time: '전철 20분', price: '2,000엔~', rating: 4.4, hours: '11:10-23:00', desc: '텐마 시장의 터줏대감, 저렴한 가격에 맛보는 고퀄리티 스시 정식' },
-        { id: 913, name: '토키스시 난바점', sub: 'sushi', area: 'namba', time: '도보 8분', price: '1,000엔~', rating: 4.3, hours: '11:00-22:30', desc: '우라난바 가성비 제왕! 800엔대 런치 세트로 입소문 난 보석 같은 곳' },
+        { id: 912, name: '스시마사 총본점', sub: 'sushi', area: 'tenma', time: '전철 20분', price: '2,000엔~', rating: 4.4, waitLevel: 'medium', hours: '11:10-23:00', desc: '텐마 시장의 터줏대감, 저렴한 가격에 맛보는 고퀄리티 스시 정식' },
+        { id: 913, name: '토키스시 난바점', sub: 'sushi', area: 'namba', time: '도보 8분', price: '1,000엔~', rating: 4.3, waitLevel: 'medium', hours: '11:00-22:30', desc: '우라난바 가성비 제왕! 800엔대 런치 세트로 입소문 난 보석 같은 곳' },
+
+        // --- Added: Kushikatsu Greats ---
+        { id: 1240, name: '야에카츠 (Yaekatsu)', sub: 'kushikatsu', area: 'others', time: '전철 15분', price: '2,000엔~', rating: 4.6, res: false, waitLevel: 'high', hours: '10:30-21:00', desc: '신세카이 3대 천왕, 부드러운 튀김옷과 특제 도테야키가 일품 (타베로그 3.7+)' },
+        { id: 1241, name: '텐구 (Tengu)', sub: 'kushikatsu', area: 'others', time: '전철 15분', price: '2,000엔~', rating: 4.5, res: false, waitLevel: 'high', hours: '10:30-21:00', desc: '신세카이의 전설, 바삭한 튀김과 깊은 맛의 소스' },
+        { id: 1242, name: '시치복신 (Shichifukujin)', sub: 'kushikatsu', area: 'tenma', time: '전철 20분', price: '1,500엔~', rating: 4.4, res: false, hours: '11:30-22:30', desc: '텐마의 낮술 성지, 맥주와 환상 궁합인 가벼운 튀김' },
+        { id: 1243, name: '요네야 (Yoneya) 우메다 본점', sub: 'kushikatsu', area: 'umeda', time: '전철 15분', price: '1,500엔~', rating: 4.2, res: false, hours: '09:00-22:30', desc: '우메다 지하상가의 명물, 퇴근길 직장인들의 참새 방앗간' },
+
+        // --- Added: Western & Curry ---
+        { id: 1250, name: '지유켄 (Jiyuken) 난바 본점', sub: 'western', area: 'namba', time: '도보 5분', price: '800엔~', rating: 3.9, res: false, waitLevel: 'medium', hours: '11:00-21:00 (월 휴무)', desc: '100년 전통, 밥과 카레를 섞어서 날계란을 올린 "명물 카레"의 원조' },
+        { id: 1251, name: '마두라 (Madura) 커피', sub: 'western', area: 'umeda', time: '전철 16분', price: '600엔~', rating: 4.3, res: false, smoking: true, hours: '08:30-21:00', desc: '오사카 제1빌딩의 타임머신 카페, 레트로한 공간에서 즐기는 깊은 맛의 카레' },
+        { id: 1252, name: '보타니 커리 (Botani Curry)', sub: 'western', area: 'shinsaibashi', time: '도보 15분 (혼마치)', price: '1,200엔~', rating: 4.7, res: false, hours: '11:00-16:00 (일 휴무)', desc: '오사카 스파이스 카레의 정점, 미슐랭 빕구르망 등재 (줄 서는 맛집)' },
+        { id: 1253, name: '하리쥬 (Hariju) 도톤보리', sub: 'western', area: 'namba', time: '도보 5분', price: '2,000엔~', rating: 4.5, res: true, waitLevel: 'medium', hours: '11:30-21:30', desc: '1919년 창업, 최고급 와규를 사용한 비프 커틀릿과 카레' },
+
+        // --- Added: 551 & Chinese/Gyoza ---
+        { id: 1260, name: '551 호라이 본점', sub: 'chinese', area: 'namba', time: '도보 4분', price: '500엔~', rating: 4.6, res: false, waitLevel: 'high', hours: '10:00-21:30', desc: '오사카 명물 부타만(고기만두), 안 먹고 가면 유죄 (포장/식사 모두 가능)' },
+        { id: 1261, name: '텐페이 (Tenpei) 키타신치', sub: 'chinese', area: 'umeda', time: '전철 12분', price: '2,000엔~', rating: 4.5, res: false, hours: '17:00-02:00 (일 휴무)', desc: '오사카 히토쿠치(한입) 교자의 발상지, 얇은 피와 바삭함이 예술' },
+        { id: 1262, name: '오사카 오쇼 도톤보리', sub: 'chinese', area: 'namba', time: '도보 6분', price: '1,000엔~', rating: 4.1, res: false, hours: '11:00-23:00', desc: '일본 국민 교자, 저렴하고 맛있는 교자와 볶음밥 세트' },
+
+        // --- Added: Fugu (Blowfish) ---
+        { id: 1270, name: '현품 복어 (Genpin) 난바', sub: 'fugu', area: 'namba', time: '도보 8분', price: '5,000엔~', rating: 4.4, res: true, waitLevel: 'medium', hours: '12:00-22:00', desc: '복어요리 대중화의 선두주자, 합리적인 코스로 즐기는 사시미와 탕' },
+        { id: 1271, name: '타코야스 (Takoyasu)', sub: 'fugu', area: 'osakabay', time: '전철 25분', price: '20,000엔~', rating: 4.8, res: true, hours: '12:00-21:00', desc: '미슐랭 2스타, 80년 전통의 최고급 자연산 복어 요리 전문점' },
         { id: 914, name: '에비스쵸 엔도스시', sub: 'others', area: 'others', time: '전철 25분', price: '2,500엔~', rating: 4.6, hours: '06:00-14:00', desc: '오사카 시장 스타일의 츠카미 스시, 입안에서 사르르 녹는 신선함' },
         { id: 915, name: '스시한 난바점', sub: 'sushi', area: 'namba', time: '도보 10분', price: '2,500엔~', rating: 4.4, hours: '11:30-22:00', desc: '정갈한 분위기에서 즐기는 신선한 제철 생선 전문 스시집' },
 
@@ -178,11 +206,11 @@ let state = {
         { id: 1602, name: '카만자 (Kamanza)', sub: 'teishoku', area: 'nipponbashi', time: '도보 8분', price: '1,200엔', rating: 4.2, hours: '11:30-20:00', desc: '현지인들이 줄 서는 닛폰바시 카레 찐맛집' },
         { id: 1603, name: '소바요시 (Sobayoshi)', sub: 'teishoku', area: 'namba', time: '도보 15분 (다이코쿠초)', price: '1,000엔', rating: 4.1, hours: '11:00-21:00', desc: '에도 시대부터 이어온 소바 명가, 메밀 향이 일품' },
         { id: 1604, name: '홋쿄쿠세이 신사이바시', sub: 'teishoku', area: 'shinsaibashi', time: '도보 6분', price: '1,500엔', rating: 4.3, hours: '11:30-22:00', desc: '일본 오므라이스의 원조, 전통 가옥에서 즐기는 클래식한 맛' },
-        { id: 1605, name: '미즈노 (Mizuno)', sub: 'teishoku', area: 'namba', time: '도보 5분', price: '1,800엔~', rating: 4.0, hours: '11:00-22:00', desc: '미슐랭 빕구르망, 도톤보리 오코노미야키 3대장 중 하나' },
-        { id: 1606, name: '카메스시 총본점', sub: 'sushi', area: 'umeda', time: '전철 17분', price: '3,000엔~', rating: 4.4, hours: '11:30-22:30', desc: '한국인에게 가장 사랑받는 우메다 가성비 스시, 두툼한 네타' },
+        { id: 1605, name: '미즈노 (Mizuno)', sub: 'teishoku', area: 'namba', time: '도보 5분', price: '1,800엔~', rating: 4.0, waitLevel: 'high', hours: '11:00-22:00', desc: '미슐랭 빕구르망, 도톤보리 오코노미야키 3대장 중 하나' },
+        { id: 1606, name: '카메스시 총본점', sub: 'sushi', area: 'umeda', time: '전철 17분', price: '3,000엔~', rating: 4.4, waitLevel: 'high', hours: '11:30-22:30', desc: '한국인에게 가장 사랑받는 우메다 가성비 스시, 두툼한 네타' },
         { id: 1607, name: '하나다코 (Hanadako)', sub: 'snack', area: 'umeda', time: '전철 15분', price: '800엔', rating: 4.2, hours: '10:00-22:00', desc: '파(네기)가 산처럼 쌓인 네기마요 타코야키가 명물' },
         { id: 1608, name: '우동야 키스케', sub: 'udon', area: 'umeda', time: '전철 20분 (나카츠)', price: '1,000엔', rating: 4.6, hours: '12:00-21:00', desc: '오사카 최고의 붓카케 우동, 쫄깃한 면발과 도미어묵튀김' },
-        { id: 1609, name: '규카츠 모토무라 난바', sub: 'katsu', area: 'namba', time: '도보 5분', price: '1,800엔~', rating: 4.0, hours: '11:00-22:00', desc: '돌판에 구워 먹는 규카츠 열풍의 주역 (웨이팅 주의)' },
+        { id: 1609, name: '규카츠 모토무라 난바', sub: 'katsu', area: 'namba', time: '도보 5분', price: '1,800엔~', rating: 4.0, waitLevel: 'high', hours: '11:00-22:00', desc: '돌판에 구워 먹는 규카츠 열풍의 주역 (웨이팅 주의)' },
         { id: 1610, name: '하리쥬 (Harijyu)', sub: 'teishoku', area: 'namba', time: '도보 5분', price: '6,000엔~', rating: 4.5, res: true, hours: '11:30-21:30', desc: '100년 전통의 스키야키 명가, 특별한 날을 위한 최고급 식사' }
     ],
     desserts: [
@@ -191,11 +219,11 @@ let state = {
         { id: 503, name: 'Acidracines (아시드라신)', sub: 'bakery', area: 'tenma', time: '전철 15분', price: '800엔~', rating: 3.9, res: false, hours: '11:00-20:00 (수,목 휴무)', img: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=400&q=80', desc: '오사카 No.1 파티세리, 예술적인 쁘띠 갸또와 구움과자' },
         { id: 504, name: 'Chocolatier Palet D\'or', sub: 'cafe', area: 'umeda', time: '전철 15분', price: '2,500엔~', rating: 3.7, res: false, hours: '11:00-20:00', img: 'https://images.unsplash.com/photo-1548907602-02f6c6a76c1c?auto=format&fit=crop&w=400&q=80', desc: '초콜릿 장인의 숨결이 담긴 고품격 쇼콜라 디저트의 정점' },
         { id: 505, name: 'Creperie Alcyon', sub: 'cafe', area: 'namba', time: '도보 10분', price: '1,600엔~', rating: 3.7, res: false, hours: '11:30-21:30', img: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=400&q=80', desc: '난바 노포 크레이프 전문점, 타베로그 백명점 선정' },
-        { id: 506, name: 'Rikuro Ojisan (리쿠로)', sub: 'bakery', area: 'namba', time: '도보 8분', price: '965엔~', rating: 3.6, res: false, hours: '09:00-20:00', img: 'https://images.unsplash.com/photo-1551404885-20af4ec8a236?auto=format&fit=crop&w=400&q=80', desc: '오사카 명물! 탱글탱글한 인생 치즈케이크 갓 구운 맛' },
+        { id: 506, name: 'Rikuro Ojisan (리쿠로)', sub: 'bakery', area: 'namba', time: '도보 8분', price: '965엔~', rating: 3.6, res: false, waitLevel: 'medium', hours: '09:00-20:00', img: 'https://images.unsplash.com/photo-1551404885-20af4ec8a236?auto=format&fit=crop&w=400&q=80', desc: '오사카 명물! 탱글탱글한 인생 치즈케이크 갓 구운 맛' },
         { id: 507, name: 'Cafe Annon', sub: 'cafe', area: 'namba', time: '도보 9분', price: '1,400엔~', rating: 3.8, res: false, hours: '11:00-23:00', img: 'https://images.unsplash.com/photo-1567620905732-2d1ec7bb7445?auto=format&fit=crop&w=400&q=80', desc: '폭신폭신 팬케이크와 조용한 분위기, 난바의 숨은 보석' },
-        { id: 508, name: 'HARBS Daimaru Umeda', sub: 'bakery', area: 'umeda', time: '전철 15분', price: '1,000엔~', rating: 4.1, res: false, hours: '10:00-20:00', img: 'https://images.unsplash.com/photo-1535141192574-5d48bb7dbf11?auto=format&fit=crop&w=400&q=80', desc: '밀크 크레이프의 전설, 과일이 듬뿍 들어간 대형 케이크' },
+        { id: 508, name: 'HARBS Daimaru Umeda', sub: 'bakery', area: 'umeda', time: '전철 15분', price: '1,000엔~', rating: 4.1, res: false, waitLevel: 'high', hours: '10:00-20:00', img: 'https://images.unsplash.com/photo-1535141192574-5d48bb7dbf11?auto=format&fit=crop&w=400&q=80', desc: '밀크 크레이프의 전설, 과일이 듬뿍 들어간 대형 케이크' },
         { id: 211, name: 'Saturdays NYC Surf', sub: 'cafe', area: 'shinsaibashi', time: '도보 5분', price: '600엔~', rating: 4.4, hours: '09:00-20:00', img: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=400&q=80', desc: '세련된 무드의 서프 샵 겸 카페, 라떼가 일품' },
-        { id: 212, name: '뉴 YC (New YC)', sub: 'cafe', area: 'umeda', time: '전철 15분', price: '700엔~', rating: 4.2, smoking: true, hours: '07:00-23:00', img: 'https://images.unsplash.com/photo-1559496417-e7f25cb247f3?auto=format&fit=crop&w=400&q=80', desc: '우메다역 인근 레트로 감성 킷사텐 (전 좌석 흡연 가능)' },
+        { id: 212, name: '뉴 YC (New YC)', sub: 'kissaten', area: 'umeda', time: '전철 15분', price: '700엔~', rating: 4.2, smoking: true, hours: '07:00-23:00', img: 'https://images.unsplash.com/photo-1559496417-e7f25cb247f3?auto=format&fit=crop&w=400&q=80', desc: '우메다역 인근 레트로 감성 킷사텐 (전 좌석 흡연 가능)' },
         { id: 213, name: '코메다 커피 (난바)', sub: 'cafe', area: 'namba', time: '도보 5분', price: '500엔~', rating: 4.3, smoking: 'room', hours: '07:00-23:00', img: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=400&q=80', desc: '일본의 국민 카페, 모닝 세트가 유명 (흡연실 완비)' },
         { id: 214, name: '카페 M (Cafe M)', sub: 'cafe', area: 'namba', time: '도보 10분', price: '600엔~', rating: 4.1, smoking: true, hours: '08:00-20:00', img: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=400&q=80', desc: '오사카 현지인들이 즐겨 찾는 아늑한 흡연 카페' },
         { id: 215, name: '홀리스 카페 (Holly’s Cafe)', sub: 'cafe', area: 'shinsaibashi', time: '도보 3분', price: '400엔~', rating: 4.0, smoking: 'room', hours: '08:00-22:00', img: 'https://images.unsplash.com/photo-1521017432531-fbd92d744264?auto=format&fit=crop&w=400&q=80', desc: '가성비 좋은 더치커피 전문점 (분점마다 흡연실 완비)' },
@@ -203,27 +231,33 @@ let state = {
         { id: 509, name: 'Cafe La Pause', sub: 'cafe', area: 'umeda', time: '전철 16분', price: '1,500엔~', rating: 3.8, res: false, hours: '11:00-22:00', img: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=400&q=80', desc: '루쿠아 내 위치한 프렌치 수플레 팬케이크 명소' },
         { id: 510, name: 'HANNOC', sub: 'cafe', area: 'umeda', time: '전철 18분', price: '1,800엔~', rating: 4.5, res: false, hours: '11:00-21:00', img: 'https://images.unsplash.com/photo-1559925393-8be0ec41b513?auto=format&fit=crop&w=400&q=80', desc: '파티시에들의 예술적인 디저트를 맛볼 수 있는 트렌디 카페' },
         { id: 511, name: 'Canele du Japon', sub: 'bakery', area: 'namba', time: '도보 12분', price: '1,000엔~', rating: 3.6, res: false, hours: '10:00-19:00 (수요일 휴무)', img: 'https://images.unsplash.com/photo-1629115916087-7e8c114a24ed?auto=format&fit=crop&w=400&q=80', desc: '전통과 퓨전이 만난 오사카 까눌레 전문점' },
-        { id: 512, name: 'Jun Kissa American', sub: 'cafe', area: 'namba', time: '도보 5분', price: '1,000엔~', rating: 3.7, res: false, smoking: true, hours: '09:00-22:30', img: 'https://images.unsplash.com/photo-1517433367423-c7e5b0f35086?auto=format&fit=crop&w=400&q=80', desc: '쇼와 레트로 감성 순다방 (좌석 흡연 가능)' },
+        { id: 512, name: 'Jun Kissa American', sub: 'kissaten', area: 'namba', time: '도보 5분', price: '1,000엔~', rating: 3.7, res: false, smoking: true, hours: '09:00-22:30', img: 'https://images.unsplash.com/photo-1517433367423-c7e5b0f35086?auto=format&fit=crop&w=400&q=80', desc: '쇼와 레트로 감성 순다방 (좌석 흡연 가능)' },
         { id: 513, name: 'Masahiko Ozumi Paris', sub: 'bakery', area: 'umeda', time: '전철 15분', price: '1,200엔~', rating: 3.9, res: false, hours: '10:00-20:00', img: 'https://images.unsplash.com/photo-1532499016263-f2c3e98df9c8?auto=format&fit=crop&w=400&q=80', desc: '털실 모양 털실케이크로 유명한 파리 감성 하이엔드 파티세리' },
         { id: 514, name: 'Pancake Cafe Mog', sub: 'cafe', area: 'namba', time: '도보 5분', price: '1,200엔~', rating: 3.6, res: false, hours: '11:00-21:00', img: 'https://images.unsplash.com/photo-1567620905732-2d1ec7bb7445?auto=format&fit=crop&w=400&q=80', desc: '가장 맛있는 팬케이크 전문점, 폭신한 식감이 일품' },
         { id: 515, name: 'COLONY by EQI', sub: 'cafe', area: 'shinsaibashi', time: '도보 5분', price: '1,500엔~', rating: 4.6, res: false, hours: '11:00-23:00', desc: '아메무라의 전설적인 수플레 팬케이크 맛집' },
-        { id: 516, name: '행복의 팬케이크 난바점', sub: 'cafe', area: 'namba', time: '도보 5분', price: '1,400엔~', rating: 4.4, res: false, hours: '11:00-20:00', desc: '입안에서 사르르 녹는 구름 같은 식감의 팬케이크' },
-        { id: 704, name: '시아와세노 팬케이크', sub: 'cafe', area: 'shinsaibashi', time: '도보 8분', price: '1,200엔', rating: 4.5, res: true, hours: '10:00-19:30', desc: '폭신폭신한 수플레 팬케이크의 정석 (예약 필수)' },
+        { id: 516, name: '행복의 팬케이크 난바점', sub: 'cafe', area: 'namba', time: '도보 5분', price: '1,400엔~', rating: 4.4, res: false, waitLevel: 'high', hours: '11:00-20:00', desc: '입안에서 사르르 녹는 구름 같은 식감의 팬케이크' },
+        { id: 704, name: '시아와세노 팬케이크', sub: 'cafe', area: 'shinsaibashi', time: '도보 8분', price: '1,200엔', rating: 4.5, res: true, waitLevel: 'high', hours: '10:00-19:30', desc: '폭신폭신한 수플레 팬케이크의 정석 (예약 필수)' },
         { id: 705, name: '카카아카카 (Kakaakaka)', sub: 'bakery', area: 'namba', time: '도보 12분', price: '300엔~', rating: 4.2, res: false, hours: '10:00-18:00', desc: '귀여운 비주얼과 달콤한 맛의 도넛 전문점' },
 
         // --- Tabelog High Ranking Desserts ---
         { id: 710, name: '아시드라신 (Acidracines)', sub: 'bakery', area: 'tenma', time: '전철 25분', price: '600엔~', rating: 4.8, res: false, hours: '11:00-20:00 (수목 휴무)', desc: '오사카 타베로그 1위, 예술적인 쁘띠 갸또와 케이크' },
-        { id: 711, name: '살롱 드 몽쉐르 (도지마롤)', sub: 'cafe', area: 'shinsaibashi', time: '도보 5분', price: '800엔~', rating: 4.5, res: false, hours: '10:00-20:00', desc: '전설적인 도지마롤 본점, 크림의 풍미가 차원이 다름' },
-        { id: 712, name: '고칸 (GOKAN) 기타하마', sub: 'cafe', area: 'umeda', time: '전철 15분', price: '1,200엔~', rating: 4.6, res: true, hours: '09:30-19:30', desc: '근대 건축 문화재에서 즐기는 쌀로 만든 고급 디저트와 브런치' },
-        { id: 713, name: '모토커피 (MOTO COFFEE)', sub: 'cafe', area: 'umeda', time: '전철 15분', price: '600엔~', rating: 4.4, res: false, hours: '12:00-18:30', desc: '강변 테라스 뷰가 환상적인 기타하마의 대표 감성 카페' },
-        { id: 714, name: '하브스 (HARBS) 난바 파크스', sub: 'cafe', area: 'namba', time: '도보 12분', price: '900엔~', rating: 4.3, res: false, hours: '11:00-21:00', desc: '과일이 듬뿍 들어간 거대한 밀크레이프 케이크의 성지' },
-        { id: 715, name: '리쿠로 오지상 치즈케이크', sub: 'bakery', area: 'namba', time: '도보 5분', price: '900엔', rating: 4.5, res: false, hours: '09:00-20:00', desc: '갓 구워 나온 탱글탱글한 치즈케이크, 가성비 최고의 선물' },
+        { id: 711, name: '살롱 드 몽쉐르 (도지마롤)', sub: 'cafe', area: 'shinsaibashi', time: '도보 5분', price: '800엔~', rating: 4.5, res: false, waitLevel: 'medium', hours: '10:00-20:00', desc: '전설적인 도지마롤 본점, 크림의 풍미가 차원이 다름' },
+        { id: 712, name: '고칸 (GOKAN) 기타하마', sub: 'cafe', area: 'umeda', time: '전철 15분', price: '1,200엔~', rating: 4.6, res: true, waitLevel: 'medium', hours: '09:30-19:30', desc: '근대 건축 문화재에서 즐기는 쌀로 만든 고급 디저트와 브런치' },
+        { id: 713, name: '모토커피 (MOTO COFFEE)', sub: 'cafe', area: 'umeda', time: '전철 15분', price: '600엔~', rating: 4.4, res: false, waitLevel: 'high', hours: '12:00-18:30', desc: '강변 테라스 뷰가 환상적인 기타하마의 대표 감성 카페' },
+        { id: 714, name: '하브스 (HARBS) 난바 파크스', sub: 'cafe', area: 'namba', time: '도보 12분', price: '900엔~', rating: 4.3, res: false, waitLevel: 'high', hours: '11:00-21:00', desc: '과일이 듬뿍 들어간 거대한 밀크레이프 케이크의 성지' },
+        { id: 715, name: '리쿠로 오지상 치즈케이크', sub: 'bakery', area: 'namba', time: '도보 5분', price: '900엔', rating: 4.5, res: false, waitLevel: 'medium', hours: '09:00-20:00', desc: '갓 구워 나온 탱글탱글한 치즈케이크, 가성비 최고의 선물' },
         { id: 716, name: '그로브 (Glove Cafe)', sub: 'cafe', area: 'tenma', time: '전철 20분', price: '500엔~', rating: 4.2, res: false, hours: '11:00-18:00', desc: '텐진바시 상점가의 숨은 명소, 엔틱한 분위기의 홍차 전문점' },
         { id: 717, name: 'PABLO (파블로) 미니', sub: 'bakery', area: 'namba', time: '도보 6분', price: '300엔~', rating: 4.1, res: false, hours: '11:00-21:00', desc: '한 손에 쏙 들어오는 진한 치즈 타르트' },
         { id: 718, name: '카코 바 (Cacao Bar)', sub: 'cafe', area: 'umeda', time: '전철 18분', price: '2,000엔~', rating: 4.7, res: true, hours: '13:00-19:00', desc: '초콜릿 장인이 선사하는 최고급 디저트 코스 (예약 필수)' },
-        { id: 719, name: '모찌쇼 시즈쿠', sub: 'bakery', area: 'shinsaibashi', time: '도보 10분', price: '500엔~', rating: 4.6, res: false, hours: '10:30-18:00', desc: '현대적인 감각으로 재해석한 예술 같은 떡 디저트' },
+        { id: 719, name: '모찌쇼 시즈쿠', sub: 'matcha', area: 'shinsaibashi', time: '도보 10분', price: '500엔~', rating: 4.6, res: false, hours: '10:30-18:00', desc: '현대적인 감각으로 재해석한 예술 같은 떡 디저트' },
         { id: 519, name: '번사이드 스트리트 카페', sub: 'cafe', area: 'shinsaibashi', time: '도보 6분', price: '1,400엔~', rating: 4.2, res: false, hours: '11:00-20:00', desc: '화이트 & 우드 톤의 감각적인 팬케이크 맛집' },
         { id: 520, name: '에그앤띵스', sub: 'cafe', area: 'shinsaibashi', time: '도보 4분', price: '1,500엔~', rating: 4.1, res: false, hours: '09:00-21:00', desc: '하와이안 감성의 산더미 생크림 팬케이크' },
+
+        // --- Added: Retro Kissaten & Matcha ---
+        { id: 730, name: '아라비야 커피 (Arabiya)', sub: 'kissaten', area: 'namba', time: '도보 6분', price: '700엔~', rating: 4.4, hours: '10:00-18:00 (수요일 휴무)', desc: '1951년 창업, 목조 인테리어가 멋진 정통 킷사텐 (흡연 가능)' },
+        { id: 731, name: '킷사텐 카가리 (Kagari)', sub: 'kissaten', area: 'umeda', time: '전철 15분', price: '600엔~', rating: 4.3, hours: '08:00-22:00', desc: '치즈케이크와 진한 커피가 맛있는 전형적인 쇼와 레트로 다방' },
+        { id: 732, name: '나카무라 토키치 (Tokichi)', sub: 'matcha', area: 'umeda', time: '전철 15분', price: '1,500엔~', rating: 4.7, hours: '11:00-20:00', desc: '교토 우지의 전설적인 말차 전문점. 인생 말차 파르페' },
+        { id: 733, name: '우지엔 (Ujien) 본점', sub: 'matcha', area: 'shinsaibashi', time: '도보 5분', price: '1,000엔~', rating: 4.5, hours: '10:00-20:00', desc: '오사카 한복판에서 즐기는 고급 말차 몬블랑과 빙수' },
 
         // --- Tennoji Sweets ---
         { id: 1501, name: '하브스 텐노지 미오', sub: 'bakery', area: 'tennoji', time: '전철 15분', price: '1,000엔~', rating: 4.3, res: false, hours: '11:00-21:00', desc: '텐노지에서도 맛보는 과일 밀크레이프, 뷰가 좋음' },
@@ -336,11 +370,32 @@ let state = {
         { id: 1642, name: 'K-BOOKS 오사카 난바', sub: 'hobby', area: 'nipponbashi', time: '도보 10분', rating: 4.3, hours: '11:00-20:00', desc: '여성향 굿즈가 특히 강한 애니메이션 샵' },
         { id: 1643, name: '한큐 맨즈 오사카', sub: 'dept', area: 'umeda', time: '전철 15분', rating: 4.6, hours: '11:00-20:00', desc: '남성을 위한 모든 명품이 모인 일본 최대급 맨즈 백화점' },
         { id: 1644, name: '그랜드 프론트 오사카', sub: 'dept', area: 'umeda', time: '전철 16분', rating: 4.7, hours: '10:00-21:00', desc: '우메다 북쪽의 거대 복합 타운, 세련된 라이프스타일 샵 다수' },
-        { id: 1645, name: '난바 시티 (NAMBA CITY)', sub: 'dept', area: 'namba', time: '도보 3분', rating: 4.1, hours: '11:00-21:00', desc: '난바역과 바로 연결된 지하상가 및 쇼핑몰, 캐주얼 브랜드 중심' }
+        { id: 1645, name: '난바 시티 (NAMBA CITY)', sub: 'dept', area: 'namba', time: '도보 3분', rating: 4.1, hours: '11:00-21:00', desc: '난바역과 바로 연결된 지하상가 및 쇼핑몰, 캐주얼 브랜드 중심' },
+
+        // --- Expanded Vintage & General Shopping ---
+        { id: 1801, name: 'NUTTY Vintage', sub: 'vintage', area: 'namba', time: '도보 12분', rating: 4.6, hours: '12:00-20:00', desc: '오렌지 스트릿의 보석 같은 빈티지 샵, 유니크한 50년대 스타일' },
+        { id: 1802, name: 'LARA VINTAGE', sub: 'vintage', area: 'shinsaibashi', time: '도보 8분', rating: 4.4, hours: '13:00-20:00', desc: '여성스럽고 우아한 라인업이 돋보이는 큐레이션 빈티지' },
+        { id: 1803, name: 'Elulu by JAM Umeda', sub: 'vintage', area: 'umeda', time: '전철 16분', rating: 4.5, hours: '11:00-21:00', desc: '여성 전용 대형 빈티지 스토어, 나카자키초 인근' },
+        { id: 1804, name: 'Grizzly Amemura', sub: 'vintage', area: 'shinsaibashi', time: '도보 5분', rating: 4.3, hours: '12:00-20:00', desc: '아메무라의 힙한 분위기, 합리적인 가격대의 유즈드 의류' },
+        { id: 1805, name: 'Green Pepe', sub: 'vintage', area: 'umeda', time: '전철 18분', rating: 4.7, hours: '12:00-19:00 (화 휴무)', desc: '나카자키초의 레트로 그 자체, 7080 감성 소품과 의류' },
+        { id: 1806, name: 'Standard Bookstore', sub: 'hobby', area: 'tennoji', time: '전철 15분', rating: 4.5, hours: '11:00-20:00', desc: '책과 커피, 잡화가 어우러진 감각적인 서점' },
+        { id: 1807, name: 'Flying Tiger Copenhagen', sub: 'hobby', area: 'shinsaibashi', time: '도보 5분', rating: 4.2, hours: '11:00-20:00', desc: '덴마크의 다이소, 컬러풀하고 유머러스한 파티 용품' },
+        { id: 1808, name: 'Village Vanguard (Americamura)', sub: 'hobby', area: 'shinsaibashi', time: '도보 5분', rating: 4.4, hours: '11:00-21:00', desc: '놀 수 있는 서점, 기상천외한 잡화와 서브컬처 굿즈' },
+        { id: 1809, name: 'D&Department Osaka', sub: 'hobby', area: 'namba', time: '도보 15분', rating: 4.6, hours: '11:30-19:00 (수 휴무)', desc: '롱 라이프 디자인을 추구하는 편집샵, 오사카 감성 가득' },
+        { id: 1810, name: 'BIOTOP Osaka', sub: 'street', area: 'namba', time: '도보 12분', rating: 4.5, hours: '11:00-20:00', desc: '식물원 같은 분위기의 럭셔리 라이프스타일 편집샵' },
+
+        // --- Additional Spots (UX Upgrade) ---
+        { id: 1811, name: '루쿠아 1100 (LUCUA 1100)', sub: 'dept', area: 'umeda', time: '전철 15분', rating: 4.7, hours: '10:30-20:30', desc: '트렌디한 2030 여성을 위한 쇼핑몰! 츠타야 서점과 무인양품 입점' },
+        { id: 1812, name: '닌텐도 오사카 (Nintendo)', sub: 'hobby', area: 'umeda', time: '전철 16분', rating: 4.9, hours: '10:00-20:00', desc: '다이마루 우메다 13층, 슈퍼마리오와 젤다 굿즈의 천국' },
+        { id: 1813, name: '점프샵 오사카 (JUMP SHOP)', sub: 'hobby', area: 'umeda', time: '전철 16분', rating: 4.6, hours: '10:30-20:30', desc: '햅파이브 인근, 원피스/주술회전 등 소년점프 공식 굿즈샵' },
+        { id: 1814, name: '디즈니 스토어 (Disney)', sub: 'hobby', area: 'umeda', time: '전철 16분', rating: 4.8, hours: '11:00-21:00', desc: '루쿠아 1100 근처, 오사카 한정판 인형과 굿즈 가득' },
+        { id: 1815, name: '포터 스탠드 (PORTER STAND)', sub: 'street', area: 'namba', time: '도보 4분', rating: 4.5, hours: '11:00-21:00', desc: '난바 파크스 내 위치, 요시다 포터의 가방 전문 컨셉 스토어' },
+        { id: 1816, name: '오사카 다카시마야', sub: 'dept', area: 'namba', time: '도보 1분', rating: 4.4, hours: '10:00-20:00', desc: '난바역 직결 정통 백화점, 지하 식품관 디저트가 유명' },
+        { id: 1817, name: '키디랜드 (Kiddy Land)', sub: 'hobby', area: 'umeda', time: '전철 15분', rating: 4.7, hours: '10:00-21:00', desc: '한큐 삼번가, 리락쿠마/스누피/미피 등 캐릭터 굿즈 총집합' }
     ],
     bars: [
         // --- Shinsaibashi / Namba (Clubs & Hunting) ---
-        { id: 301, name: 'BAMBI (밤비)', sub: 'club', area: 'shinsaibashi', time: '도보 5분', price: '3,000엔~', rating: 4.2, hunting: true, smoking: true, hours: '22:00-05:00', img: 'https://images.unsplash.com/photo-1566737236500-c83d80142a9e?auto=format&fit=crop&w=400&q=80', desc: '신사이바시 No.1 클럽 (실내 흡연 가능)' },
+        { id: 301, name: 'BAMBI (밤비)', sub: 'club', area: 'shinsaibashi', time: '도보 5분', price: '3,000엔~', rating: 4.2, hunting: true, smoking: true, waitLevel: 'high', hours: '22:00-05:00', img: 'https://images.unsplash.com/photo-1566737236500-c83d80142a9e?auto=format&fit=crop&w=400&q=80', desc: '신사이바시 No.1 클럽 (실내 흡연 가능)' },
         { id: 302, name: 'The Pink', sub: 'club', area: 'shinsaibashi', time: '도보 7분', price: '2,500엔~', rating: 4.3, hunting: true, smoking: true, hours: '22:00-05:00', img: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=400&q=80', desc: '힙합 성지 (실내 흡연 가능)' },
         { id: 303, name: 'GALA RESORT', sub: 'club', area: 'namba', time: '도보 8분', price: '3,000엔~', rating: 4.1, hunting: true, smoking: true, hours: '22:00-05:00', img: 'https://images.unsplash.com/photo-1545128485-c400e7702796?auto=format&fit=crop&w=400&q=80', desc: '초대형 테마 클럽 (실내 흡연 가능)' },
         { id: 304, name: 'GIRAFFE JAPAN (2025 NEW)', sub: 'club', area: 'namba', time: '도보 5분', price: '3,000엔~', rating: 4.0, hunting: true, smoking: true, hours: '19:00-01:00', img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', desc: '도톤보리 랜드마크 클럽 (실내 흡연 가능)' },
@@ -350,7 +405,7 @@ let state = {
         { id: 332, name: 'Bee 난바', sub: 'izakaya', area: 'namba', time: '도보 10분', price: '2,000엔~', rating: 4.1, hunting: true, smoking: true, hours: '17:00-05:00', img: 'https://images.unsplash.com/photo-1563514227147-6d2ff665a6a0?auto=format&fit=crop&w=400&q=80', desc: '다트가 있는 소셜 펍 (흡연 가능)' },
 
         // --- Umeda (Adult Clubs) ---
-        { id: 306, name: 'OWL OSAKA', sub: 'club', area: 'umeda', time: '전철 15분', price: '3,000엔~', rating: 4.4, hunting: true, smoking: 'room', hours: '19:00-01:00', img: 'https://images.unsplash.com/photo-1571266028243-e4733b0f0bb1?auto=format&fit=crop&w=400&q=80', desc: '우메다 성인 클럽 (흡연실 완비)' },
+        { id: 306, name: 'OWL OSAKA', sub: 'club', area: 'umeda', time: '전철 15분', price: '3,000엔~', rating: 4.4, hunting: true, smoking: 'room', waitLevel: 'high', hours: '19:00-01:00', img: 'https://images.unsplash.com/photo-1571266028243-e4733b0f0bb1?auto=format&fit=crop&w=400&q=80', desc: '우메다 성인 클럽 (흡연실 완비)' },
         { id: 307, name: 'PICCADILLY PREMIUM', sub: 'club', area: 'umeda', time: '전철 15분', price: '3,500엔~', rating: 4.5, hunting: false, smoking: 'room', hours: '21:00-03:00 (금토)', img: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80', desc: '영화관 개조 클럽 (흡연 전용실 있음)' },
 
         // --- Hidden Gems & Local Bars (Non-Hunting) ---
@@ -387,11 +442,11 @@ let state = {
         { id: 712, name: '소주한잔 오사카 (임창정)', sub: 'hunting', area: 'shinsaibashi', time: '도보 8분', price: '소주/안주 세트', rating: 4.4, hunting: true, smoking: 'room', hours: '17:00-05:00', desc: '소셜 포차 (흡연실 완비)' },
 
         // --- Nomihoudai (All-You-Can-Drink) Gems ---
-        { id: 381, name: '토리키조쿠 (Torikizoku) 도톤보리', sub: 'nomihoudai', area: 'namba', time: '도보 5분', price: '3,600엔 (타베노미)', rating: 4.3, hunting: false, smoking: true, hours: '17:00-05:00', desc: '일본 국민 야키토리 체인. 가성비 최강 2시간 무제한 먹고 마시기 (흡연 가능)' },
-        { id: 382, name: '0초 레몬사와 센다이 호르몬', sub: 'nomihoudai', area: 'namba', time: '도보 8분', price: '500엔/60분', rating: 4.5, hunting: false, smoking: true, hours: '17:00-23:00', desc: '테이블마다 레몬사와 수도꼭지가 설치된 0초 리필 천국. 호르몬 구이와 환상 궁합 (흡연 가능)' },
+        { id: 381, name: '토리키조쿠 (Torikizoku) 도톤보리', sub: 'nomihoudai', area: 'namba', time: '도보 5분', price: '3,600엔 (타베노미)', rating: 4.3, hunting: false, smoking: true, waitLevel: 'medium', hours: '17:00-05:00', desc: '일본 국민 야키토리 체인. 가성비 최강 2시간 무제한 먹고 마시기 (흡연 가능)' },
+        { id: 382, name: '0초 레몬사와 센다이 호르몬', sub: 'nomihoudai', area: 'namba', time: '도보 8분', price: '500엔/60분', rating: 4.5, hunting: false, smoking: true, waitLevel: 'medium', hours: '17:00-23:00', desc: '테이블마다 레몬사와 수도꼭지가 설치된 0초 리필 천국. 호르몬 구이와 환상 궁합 (흡연 가능)' },
         { id: 383, name: '바 문워크 (Bar Moon Walk)', sub: 'nomihoudai', area: 'shinsaibashi', time: '도보 6분', price: '안주 200엔~', rating: 4.4, hunting: false, smoking: true, hours: '18:00-05:00', desc: '모든 칵테일 200엔대의 충격적인 가성비. 영화 밤은 짧아 걸어 아가씨야 배경지 (흡연 가능)' },
         { id: 384, name: '쿠랜드 사케 마켓 (Kurand)', sub: 'nomihoudai', area: 'umeda', time: '전철 15분', price: '3,300엔 (무제한)', rating: 4.7, hunting: false, smoking: false, hours: '17:00-23:00', desc: '100종류 이상의 프리미엄 사케, 과실주를 시간 무제한으로 마시는 꿈의 공간 (외부 음식 반입 가능)' },
-        { id: 385, name: '신지다이 (Shinjidai) 오사카', sub: 'nomihoudai', area: 'namba', time: '도보 10분', price: '생맥주 190엔~', rating: 4.2, hunting: false, smoking: true, hours: '17:00-05:00', desc: '전설의 닭껍질 튀김 50엔, 생맥주 190엔의 압도적 가성비 (흡연 가능)' },
+        { id: 385, name: '신지다이 (Shinjidai) 오사카', sub: 'nomihoudai', area: 'namba', time: '도보 10분', price: '생맥주 190엔~', rating: 4.2, hunting: false, smoking: true, waitLevel: 'medium', hours: '17:00-05:00', desc: '전설의 닭껍질 튀김 50엔, 생맥주 190엔의 압도적 가성비 (흡연 가능)' },
         { id: 386, name: '니혼슈 우나기다니', sub: 'nomihoudai', area: 'shinsaibashi', time: '도보 5분', price: '2,000엔 (60분)', rating: 4.6, hunting: false, smoking: true, hours: '15:00-24:00', desc: '우나기다니 골목의 숨은 사케 명소. 전국 명주 무제한 시음 (흡연 가능)' },
         { id: 387, name: '280엔 야키토리 (Niwatori)', sub: 'nomihoudai', area: 'namba', time: '도보 7분', price: '전메뉴 280엔', rating: 4.0, hunting: false, smoking: true, hours: '17:00-03:00', desc: '모든 메뉴 280엔 균일가. 지갑 걱정 없이 즐기는 로컬 술집 (흡연 가능)' },
 
@@ -403,30 +458,34 @@ let state = {
 
         // --- Massive Expansion: Bars ---
         { id: 1631, name: 'Bar Guild', sub: 'social', area: 'nipponbashi', time: '도보 12분', price: '2,000엔~', rating: 4.0, hunting: false, smoking: true, hours: '18:00-24:00', desc: '서브컬처/게임 테마의 독특한 바 (동호회 느낌)' },
-        { id: 1632, name: 'Bar K', sub: 'izakaya', area: 'umeda', time: '전철 18분 (기타신치)', price: '4,000엔~', rating: 4.8, hunting: false, smoking: true, hours: '18:00-02:00', desc: '세계적인 바텐더가 있는 오센틱 바, 위스키 마니아 추천' }
+        { id: 1632, name: 'Bar K', sub: 'izakaya', area: 'kitashinchi', time: '전철 18분', price: '4,000엔~', rating: 4.8, localPick: true, smoking: true, hours: '18:00-02:00', desc: '세계적인 바텐더가 있는 오센틱 바, 위스키 마니아 추천 (기타신치 명소)' },
+        { id: 1636, name: 'The Bar Elixir', sub: 'izakaya', area: 'kitashinchi', time: '전철 16분', price: '칵테일 2,000엔~', rating: 4.9, localPick: true, waitLevel: 'low', smoking: true, hours: '19:00-03:00', desc: '기타신치의 숨겨진 보석 같은 바. 계절 과일 칵테일이 일품' },
+        { id: 1633, name: 'Bar Speakeasy', sub: 'izakaya', area: 'tenma', time: '전철 20분', price: '칵테일 1,000엔~', rating: 4.7, hunting: false, smoking: true, hours: '18:00-01:00', desc: '텐마의 전설적인 오센틱 바. 영어가 통하며 분위기가 매우 좋음' },
+        { id: 1634, name: 'Beer Belly (Minoh Beer)', sub: 'izakaya', area: 'tenma', time: '전철 18분', price: '맥주 800엔~', rating: 4.6, hunting: false, smoking: false, hours: '17:00-23:00', desc: '오사카 대표 수제맥주 미노오 맥주 직영점. 신선한 탭 맥주를 즐길 수 있음' },
+        { id: 1635, name: '타치노미 진성 (Jinsei)', sub: 'izakaya', area: 'tenma', time: '전철 20분', price: '1,500엔~', rating: 4.4, hunting: false, smoking: true, hours: '15:00-23:00', desc: '텐마 시장의 활기찬 분위기 속에서 즐기는 가성비 최강 타치노미' }
     ],
     activities: [
         // --- Shinsaibashi / Namba ---
         { id: 431, name: '오사카 고카트 체험', sub: 'others', area: 'namba', time: '도보 10분', price: '7,000엔~', rating: 4.9, hours: '10:00-21:00', img: 'https://images.unsplash.com/photo-1511994298241-608e28f14f66?auto=format&fit=crop&w=400&q=80', desc: '도로 위를 달리는 슈퍼카트, 오사카 거리를 누비는 쾌감' },
         { id: 432, name: '도톤보리 리버 크루즈', sub: 'others', area: 'namba', time: '도보 5분', price: '1,200엔~', rating: 4.3, hours: '11:00-21:00', img: 'https://images.unsplash.com/photo-1549110462-817db4957e8f?auto=format&fit=crop&w=400&q=80', desc: '강 위에서 즐기는 오사카의 화려한 네온사인과 글리코상' },
         { id: 437, name: '닌자 체험 카페', sub: 'others', area: 'namba', time: '도보 10분', price: '3,000엔~', rating: 4.7, hours: '10:00-20:00', img: 'https://images.unsplash.com/photo-1551024739-78e9d60c45ca?auto=format&fit=crop&w=400&q=80', desc: '닌자 복을 입고 수리검 던지기 체험! SNS 인증샷 명소' },
-        { id: 411, name: '스파월드 세계의 대온천', sub: 'onsen', area: 'namba', time: '전철 12분', price: '1,500엔~', rating: 4.2, hours: '10:00-익일 08:45', img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=400&q=80', desc: '전 세계 테마 온천이 모인 거대 휴양소, 슬라이드 완비' },
+        { id: 411, name: '스파월드 세계의 대온천', sub: 'onsen', area: 'namba', time: '전철 12분', price: '1,500엔~', rating: 4.2, waitLevel: 'medium', hours: '10:00-익일 08:45', img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=400&q=80', desc: '전 세계 테마 온천이 모인 거대 휴양소, 슬라이드 완비' },
         { id: 441, name: '라운드원 센니치마에', sub: 'sports', area: 'namba', time: '도보 8분', price: '2,000엔~', rating: 4.1, hours: '24시간 영업', img: 'https://images.unsplash.com/photo-1538356111083-74819827bbbb?auto=format&fit=crop&w=400&q=80', desc: '볼링, 배팅, 다트 등 스포츠와 게임을 한번에 즐기는 곳' },
 
         // --- Umeda ---
-        { id: 404, name: '우메다 스카이빌딩', sub: 'theme', area: 'umeda', time: '전철 18분', price: '1,500엔~', rating: 4.5, hours: '09:30-22:30', img: 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=400&q=80', desc: '공중정원에서 바라보는 오사카 최고의 야경 명소' },
+        { id: 404, name: '우메다 스카이빌딩', sub: 'theme', area: 'umeda', time: '전철 18분', price: '1,500엔~', rating: 4.5, waitLevel: 'medium', hours: '09:30-22:30', img: 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=400&q=80', desc: '공중정원에서 바라보는 오사카 최고의 야경 명소' },
         { id: 421, name: '골드짐 오사카 우메다', sub: 'sports', area: 'umeda', time: '전철 15분', price: '1일권 2,860엔', rating: 4.5, hours: '07:00-23:30 (일요일 20:00)', img: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=400&q=80', desc: '헬스 매니아 성지, 오사카 최고의 운동 시설' },
         { id: 422, name: '우메다 배팅 돔', sub: 'sports', area: 'umeda', time: '전철 16분', price: '400엔~', rating: 4.3, hours: '10:00-23:00', img: 'https://images.unsplash.com/photo-1505236858219-8359eb29e3a9?auto=format&fit=crop&w=400&q=80', desc: '스트레스 해소에 최고! 남녀노소 즐기는 야구 배팅 센터' },
 
         // --- Osaka Bay / Others ---
-        { id: 401, name: '유니버설 스튜디오 재팬', sub: 'theme', area: 'osakabay', time: '전철 30분', price: '8,000엔~', rating: 4.8, hours: '09:00-21:00 (변동)', img: 'https://images.unsplash.com/photo-1513413173474-264ff97f6e29?auto=format&fit=crop&w=400&q=80', desc: '설명이 필요 없는 오사카 최고의 테마파크, 마리오 월드 필수' },
-        { id: 402, name: '오사카 성', sub: 'theme', area: 'osakabay', time: '전철 20분', price: '600엔~', rating: 4.4, hours: '09:00-17:00', img: 'https://images.unsplash.com/photo-1528143105747-d58611986427?auto=format&fit=crop&w=400&q=80', desc: '오사카의 랜드마크, 밤에는 일루미네이션이 아름다움' },
-        { id: 403, name: '가이유칸 수족관', sub: 'theme', area: 'osakabay', time: '전철 35분', price: '2,700엔~', rating: 4.6, hours: '10:00-20:00', img: 'https://images.unsplash.com/photo-1509721148483-4cbb3ca52914?auto=format&fit=crop&w=400&q=80', desc: '세계 최대 규모의 수족관, 거대 고래상어를 볼 수 있음' },
-        { id: 412, name: '소라니와 온천', sub: 'onsen', area: 'osakabay', time: '전철 25분', price: '2,500엔~', rating: 4.3, hours: '11:00-23:00', img: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=400&q=80', desc: '유카타 입고 일본 정원을 걷는 체험형 온천' },
+        { id: 401, name: '유니버설 스튜디오 재팬', sub: 'theme', area: 'osakabay', time: '전철 30분', price: '8,000엔~', rating: 4.8, waitLevel: 'high', hours: '09:00-21:00 (변동)', img: 'https://images.unsplash.com/photo-1513413173474-264ff97f6e29?auto=format&fit=crop&w=400&q=80', desc: '설명이 필요 없는 오사카 최고의 테마파크, 마리오 월드 필수' },
+        { id: 402, name: '오사카 성', sub: 'theme', area: 'osakabay', time: '전철 20분', price: '600엔~', rating: 4.4, waitLevel: 'medium', hours: '09:00-17:00', img: 'https://images.unsplash.com/photo-1528143105747-d58611986427?auto=format&fit=crop&w=400&q=80', desc: '오사카의 랜드마크, 밤에는 일루미네이션이 아름다움' },
+        { id: 403, name: '가이유칸 수족관', sub: 'theme', area: 'osakabay', time: '전철 35분', price: '2,700엔~', rating: 4.6, waitLevel: 'medium', hours: '10:00-20:00', img: 'https://images.unsplash.com/photo-1509721148483-4cbb3ca52914?auto=format&fit=crop&w=400&q=80', desc: '세계 최대 규모의 수족관, 거대 고래상어를 볼 수 있음' },
+        { id: 412, name: '소라니와 온천', sub: 'onsen', area: 'osakabay', time: '전철 25분', price: '2,500엔~', rating: 4.3, waitLevel: 'medium', hours: '11:00-23:00', img: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=400&q=80', desc: '유카타 입고 일본 정원을 걷는 체험형 온천' },
         { id: 436, name: '헬기 야경 투어', sub: 'others', area: 'osakabay', time: '전철 40분', price: '15,000엔~', rating: 4.9, hours: '16:00-20:00 (예약제)', img: 'https://images.unsplash.com/photo-1464746109310-720137a1c435?auto=format&fit=crop&w=400&q=80', desc: '오사카 시내를 상공에서 내려다보는 럭셔리 익스피리언스' },
-        { id: 405, name: '헵파이브 대관람차', sub: 'theme', area: 'umeda', time: '전철 15분', price: '600엔', rating: 4.4, hours: '11:00-23:00', desc: '오사카 시내를 360도로 조망할 수 있는 정열의 레드 관람차' },
-        { id: 406, name: '츠텐카쿠 타워 슬라이드', sub: 'theme', area: 'osakabay', time: '전철 22분', price: '1,000엔', rating: 4.5, hours: '10:00-20:00', desc: '츠텐카쿠 타워에서 쏟아져 내려오는 짜릿한 미끄럼틀 체험' },
-        { id: 407, name: '아베노 하루카스 300', sub: 'theme', area: 'osakabay', time: '전철 18분', price: '1,500엔', rating: 4.8, hours: '09:00-22:00', desc: '일본 최고층 빌딩에서 감상하는 환상적인 스카이라인' },
+        { id: 405, name: '헵파이브 대관람차', sub: 'theme', area: 'umeda', time: '전철 15분', price: '600엔', rating: 4.4, waitLevel: 'low', hours: '11:00-23:00', desc: '오사카 시내를 360도로 조망할 수 있는 정열의 레드 관람차' },
+        { id: 406, name: '츠텐카쿠 타워 슬라이드', sub: 'theme', area: 'osakabay', time: '전철 22분', price: '1,000엔', rating: 4.5, waitLevel: 'high', hours: '10:00-20:00', desc: '츠텐카쿠 타워에서 쏟아져 내려오는 짜릿한 미끄럼틀 체험' },
+        { id: 407, name: '아베노 하루카스 300', sub: 'theme', area: 'osakabay', time: '전철 18분', price: '1,500엔', rating: 4.8, waitLevel: 'medium', hours: '09:00-22:00', desc: '일본 최고층 빌딩에서 감상하는 환상적인 스카이라인' },
         { id: 408, name: '오사카 생활의 금석관', sub: 'theme', area: 'tenma', time: '전철 20분', price: '600엔', rating: 4.3, hours: '10:00-17:00 (화요일 휴무)', desc: '에도 시대 오사카 거리를 재현한 실내 박물관 및 기모노 체험' },
         { id: 413, name: '나니와노유 온천', sub: 'onsen', area: 'tenma', time: '전철 25분', price: '800엔', rating: 4.4, hours: '08:00-01:00', desc: '빌딩 옥상에서 즐기는 시원한 노천탕과 천연 온천' },
 
@@ -496,7 +555,41 @@ let state = {
         { id: 1651, name: '자가리코 (사라다맛)', sub: 'all', area: 'all', time: '가까운 지점', price: '160엔', rating: 4.5, desc: '오독오독 씹히는 일본 국민 감자 스낵' },
         { id: 1652, name: '푸칭 푸딩 (Big)', sub: 'all', area: 'all', time: '가까운 지점', price: '160엔', rating: 4.6, desc: '탱글탱글한 커스터드 푸딩의 정석, 편의점 필수템' },
         { id: 1653, name: '이카텐 (레몬맛)', sub: 'all', area: 'all', time: '가까운 지점', price: '300엔', rating: 4.7, desc: '맥주 안주로 최고인 중독성 강한 오징어 튀김 과자' },
-        { id: 1654, name: '부르봉 알포트 초콜릿', sub: 'all', area: 'all', time: '가까운 지점', price: '120엔', rating: 4.8, desc: '통밀 비스킷과 깊은 초콜릿의 조화, 선물용으로도 굿' }
+        { id: 1654, name: '부르봉 알포트 초콜릿', sub: 'all', area: 'all', time: '가까운 지점', price: '120엔', rating: 4.8, desc: '통밀 비스킷과 깊은 초콜릿의 조화, 선물용으로도 굿' },
+
+        // --- Kaldi Coffee Farm ---
+        { id: 1701, name: '메론빵 스프레드', sub: 'kaldi', area: 'all', time: '가까운 지점', price: '332엔', rating: 4.9, hours: '10:00-21:00', desc: '식빵에 발라 굽기만 하면 메론빵으로 변신하는 마법의 잼' },
+        { id: 1702, name: '판다 안닌두부', sub: 'kaldi', area: 'all', time: '가까운 지점', price: '194엔', rating: 4.7, hours: '10:00-21:00', desc: '귀여운 판다 패키지에 담긴 탱글탱글하고 진한 우유 푸딩' },
+        { id: 1703, name: '커피 젤리', sub: 'kaldi', area: 'all', time: '가까운 지점', price: '297엔', rating: 4.6, hours: '10:00-21:00', desc: '칼디의 오리지널 로스팅 원두를 사용한 깊은 향의 커피 젤리' },
+        { id: 1704, name: '명란 마요네즈', sub: 'kaldi', area: 'all', time: '가까운 지점', price: '429엔', rating: 4.8, hours: '10:00-21:00', desc: '밥이나 빵 어디에나 잘 어울리는 만능 소스' },
+        { id: 1705, name: '카레빵 스프레드', sub: 'kaldi', area: 'all', time: '가까운 지점', price: '332엔', rating: 4.5, hours: '10:00-21:00', desc: '집에서 갓 튀긴 카레빵 맛을 낼 수 있는 인기 아이템' },
+        { id: 1706, name: '트러플 소금', sub: 'kaldi', area: 'all', time: '가까운 지점', price: '248엔', rating: 4.8, hours: '10:00-21:00', desc: '고기, 계란 요리에 뿌리면 고급스러운 풍미가 폭발하는 마법의 가루' },
+        { id: 1707, name: '살라다의 취지 (Salad no Omune)', sub: 'kaldi', area: 'all', time: '가까운 지점', price: '313엔', rating: 4.6, hours: '10:00-21:00', desc: '샐러드에 뿌려먹는 고소하고 짭짤한 특제 드레싱 소스' },
+        { id: 1708, name: '마라 완두콩', sub: 'kaldi', area: 'all', time: '가까운 지점', price: '180엔', rating: 4.4, hours: '10:00-21:00', desc: '맥주 안주로 딱! 알싸한 마라 맛이 중독적인 바삭한 완두콩 스낵' },
+        { id: 1709, name: '시칠리아 레몬 레모네이드 베이스', sub: 'kaldi', area: 'all', time: '가까운 지점', price: '398엔', rating: 4.9, hours: '10:00-21:00', desc: '물이나 탄산수에 섞기만 하면 홈카페 완성! 상큼한 리얼 레몬 과즙' },
+        { id: 1710, name: '로수 햄 칩스', sub: 'kaldi', area: 'all', time: '가까운 지점', price: '278엔', rating: 4.7, hours: '10:00-21:00', desc: '와인 안주로 강력 추천하는 짭조름하고 바삭한 햄 칩' },
+
+        // --- Massive Expansion: Vintage (Americamura/Nakazakicho) ---
+        { id: 1801, name: '킨지 (Kinji) 빅스텝점', sub: 'vintage', area: 'shinsaibashi', time: '도보 5분', price: '1,000엔~', rating: 4.3, hours: '11:00-20:00', desc: '오사카 구제의 성지 빅스텝에 위치한 초대형 매장. 초보자도 쇼핑하기 쉬움' },
+        { id: 1802, name: '후루기야 JAM (Horier)', sub: 'vintage', area: 'namba', time: '도보 8분', price: '3,000엔~', rating: 4.5, hours: '11:00-20:00', desc: '간사이 최대 규모 빈티지 샵. 상태 좋은 브랜드 구제가 가득함' },
+        { id: 1803, name: '피그스티 (Pigsty) 아메무라', sub: 'vintage', area: 'shinsaibashi', time: '도보 4분', price: '2,500엔~', rating: 4.4, hours: '11:00-20:00', desc: '미국 빈티지의 정석. 스카잔, 데님, 밀리터리 마니아의 천국' },
+        { id: 1804, name: '엘룰루 반 JAM (Elulu)', sub: 'vintage', area: 'umeda', time: '전철 15분 (나카자키초)', price: '3,000엔~', rating: 4.6, hours: '11:00-20:00', desc: '여성 빈티지 전문. 러블리하고 유니크한 원피스와 블라우스가 가득' },
+        { id: 1805, name: '칼리코 (Calico)', sub: 'vintage', area: 'umeda', time: '전철 16분 (나카자키초)', price: '5,000엔~', rating: 4.5, hours: '12:00-19:00', desc: '진짜 빈티지를 아는 사람들을 위한 고퀄리티 셀렉트 샵' },
+
+        // --- Massive Expansion: Otaku & Character ---
+        { id: 1810, name: '닌텐도 오사카 (Daimaru)', sub: 'hobby', area: 'umeda', time: '전철 15분', price: '굿즈 다양', rating: 4.9, hours: '10:00-20:00', desc: '다이마루 13층. 닌텐도 덕후들의 성지! 마리오, 젤다 굿즈 총집합 (오픈런 추천)' },
+        { id: 1811, name: '포켓몬 센터 오사카', sub: 'hobby', area: 'umeda', time: '전철 15분', price: '굿즈 다양', rating: 4.8, hours: '10:00-20:00', desc: '닌텐도 바로 옆. 귀여운 피카츄와 한정판 포켓몬 인형을 만날 수 있는 곳' },
+        { id: 1812, name: '만다라케 그랜드 카오스', sub: 'hobby', area: 'nipponbashi', time: '도보 12분', price: '희귀템 고가', rating: 4.6, hours: '12:00-20:00', desc: '서브컬처의 모든 것. 피규어, 동인지, 고전 완구까지 없는 게 없는 보물창고' },
+        { id: 1813, name: '슈퍼 포테이토 (Super Potato)', sub: 'hobby', area: 'nipponbashi', time: '도보 10분', price: '레트로 게임 다양', rating: 4.7, hours: '10:00-20:00', desc: '레트로 게임의 박물관. 어릴 적 추억의 팩 게임과 게임기를 실물로 영접' },
+        { id: 1814, name: '애니메이트 (Animate) 닛폰바시', sub: 'hobby', area: 'nipponbashi', time: '도보 10분', price: '굿즈 다양', rating: 4.5, hours: '10:00-21:00', desc: '일본 애니메이션 굿즈의 중심. 최신 애니 굿즈는 여기서 쇼핑' },
+        { id: 1815, name: '점프샵 (Jump Shop) 신사이바시', sub: 'hobby', area: 'shinsaibashi', time: '도보 3분 (파르코)', price: '굿즈 다양', rating: 4.4, hours: '10:00-20:00', desc: '원피스, 하이큐, 주술회전 등 소년 점프 인기 만화 공식 굿즈샵' },
+
+        // --- Massive Expansion: Mega Malls & Lifestyle ---
+        { id: 1820, name: '그랜드 프론트 오사카', sub: 'dept', area: 'umeda', time: '전철 16분', price: '다양', rating: 4.7, hours: '11:00-21:00', desc: '우메다의 랜드마크. 고급스러운 라이프스타일 샵과 맛집이 모인 복합 문화 공간' },
+        { id: 1821, name: '루쿠아 (LUCUA) / 1100', sub: 'dept', area: 'umeda', time: '전철 15분', price: '다양', rating: 4.6, hours: '10:30-20:30', desc: '일본 2030 여성들의 패션 트렌드를 한눈에. 트렌디한 잡화와 의류 가득' },
+        { id: 1822, name: '신사이바시 파르코 (PARCO)', sub: 'dept', area: 'shinsaibashi', time: '도보 3분', price: '다양', rating: 4.5, hours: '10:00-20:00', desc: '패션뿐만 아니라 캐릭터 샵(지브리, 짱구)과 힙한 브랜드가 모인 핫플레이스' },
+        { id: 1823, name: '로프트 (Loft) 난바', sub: 'dept', area: 'namba', time: '도보 5분', price: '다양', rating: 4.4, hours: '11:00-21:00', desc: '문구, 화장품, 생활잡화 덕후들의 개미지옥. 센스 있는 선물 사기 좋은 곳' },
+        { id: 1824, name: '도큐핸즈 (Tokyu Hands)', sub: 'dept', area: 'shinsaibashi', time: '도보 6분', price: '다양', rating: 4.3, hours: '10:00-20:00', desc: 'DIY, 여행용품, 아이디어 상품 등 "손으로 만드는 모든 것"이 있는 곳' }
     ]
 };
 
@@ -521,6 +614,8 @@ function init() {
     setupAlcoholGuide();
     setupTravelTips();
     setupPhrasebook();
+    setupPhrasebook();
+    setupSearch(); // Initialize Search
     updateDashboardUI();
     renderAll();
 }
@@ -807,10 +902,24 @@ function generateCardHtml(item, type) {
     const mapUrl = (item.map && item.map.startsWith('http')) ? item.map : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.name + ' 오사카')}`;
     const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(item.name + ' 오사카')}`;
 
+    const localPickBadge = item.localPick ? `<div class="local-pick-badge"><i data-lucide="crown"></i> Local Pick</div>` : '';
+    const waitConfig = {
+        low: { label: '대기 적음', title: '빠른 입장이 가능합니다' },
+        medium: { label: '대기 보통', title: '20~40분 내외의 대기가 있을 수 있습니다' },
+        high: { label: '대기 많음', title: '1시간 이상의 대기가 예상됩니다 (오픈런 권장)' }
+    };
+
+    const waitIndicator = item.waitLevel ? `
+        <div class="wait-indicator" title="${waitConfig[item.waitLevel].title}">
+            <span class="wait-dot ${item.waitLevel}"></span> ${waitConfig[item.waitLevel].label}
+        </div>
+    ` : '';
+
     return `
         <div class="info-card-item clickable-card" onclick="window.open('${searchUrl}', '_blank')">
             <div class="card-header">
                 <div class="tags">
+                    ${localPickBadge}
                     ${item.res ? '<span class="card-tag-res">예약필수</span>' : (item.hunting ? '<span class="card-tag-hunting">헌팅/클럽</span>' : `<span class="card-category">${item.sub}</span>`)}
                     ${item.smoking ? `<span class="card-tag-smoking ${item.smoking === 'room' ? 'room' : 'ok'}" title="${item.smoking === 'room' ? '실내 흡연실 완비' : '전 좌석 흡연 가능'}">🚬 ${item.smoking === 'room' ? '흡연실있음' : '흡연가능'}</span>` : ''}
                     ${getRatingHtml(item.rating)}
@@ -818,6 +927,7 @@ function generateCardHtml(item, type) {
             </div>
             <h4>${item.name}</h4>
             ${type !== 'convenience' ? `<div class="travel-time-badge"><i data-lucide="navigation"></i> 숙소에서 ${item.time}</div>` : ''}
+            ${waitIndicator}
             
             ${item.hours ? `<div class="card-info-row"><span class="label">운영시간</span><span class="val" style="color:var(--secondary)">${item.hours}</span></div>` : ''}
             ${item.menu ? `<div class="card-info-row"><span class="label">대표메뉴</span><span class="val">${item.menu}</span></div>` : ''}
@@ -825,7 +935,7 @@ function generateCardHtml(item, type) {
             
             <p class="card-desc">${item.desc}</p>
             <div class="card-footer" style="margin-top:auto; display:flex; justify-content:space-between; align-items:center;">
-                ${type !== 'convenience' ? `<span class="area-tag" style="font-size:10px; color:var(--text-dim); text-transform:uppercase">📍 ${item.area}</span>` : '<span></span>'}
+                ${type !== 'convenience' ? `<span class="area-tag ${item.area === 'kitashinchi' ? 'kitashinchi-tag' : ''}" style="font-size:10px; color:var(--text-dim); text-transform:uppercase">📍 ${item.area}</span>` : '<span></span>'}
                 <a href="${mapUrl}" target="_blank" class="btn-map-sm" onclick="handleNativeMapClick(event, '${mapUrl}')">
                     <i data-lucide="map"></i> 구글맵
                 </a>
@@ -880,9 +990,16 @@ function updateDashboardUI() {
     const totalCount = state.restaurants.length + state.desserts.length + state.shopping.length + state.activities.length + state.bars.length + state.convenience.length;
     const el = document.getElementById('place-count');
     if (el) el.textContent = `${totalCount}곳`;
+    const existing = localStorage.getItem('osaka_custom_items');
+    if (existing) {
+        state.customItems = JSON.parse(existing);
+    }
 }
 
-function saveToLocalStorage() { localStorage.setItem('osaka_free_state_v56', JSON.stringify(state)); }
+function saveToLocalStorage() {
+    localStorage.setItem('osaka_free_state_v56', JSON.stringify(state));
+    localStorage.setItem('osaka_custom_items', JSON.stringify(state.customItems));
+}
 function loadFromLocalStorage() {
     // Preserve initial hardcoded state for merging by creating a deep copy
     const initialData = JSON.parse(JSON.stringify(state));
@@ -898,11 +1015,13 @@ function loadFromLocalStorage() {
                 ['restaurants', 'desserts', 'shopping', 'activities', 'bars', 'convenience'].forEach(cat => {
                     const defaultItems = initialData[cat] || [];
                     if (parsed[cat]) {
-                        // Update existing items from default state
+                        // Update existing items from default state or mark for removal
                         const updatedParsed = parsed[cat].map(loadedItem => {
                             const defaultItem = defaultItems.find(i => i.id === loadedItem.id);
-                            return defaultItem ? { ...loadedItem, ...defaultItem } : loadedItem;
-                        });
+                            if (defaultItem) return { ...loadedItem, ...defaultItem };
+                            // If not in default state, keep only if it's a user-added custom item (id > 10000)
+                            return (loadedItem.id > 10000) ? loadedItem : null;
+                        }).filter(i => i !== null);
 
                         // Add new items that didn't exist in the old version
                         const existingIds = new Set(updatedParsed.map(i => i.id));
@@ -1033,8 +1152,13 @@ function updateThemeChoices() {
             { val: 'yakiniku', icon: '🥩', label: '고기/야키니쿠/호르몬' },
             { val: 'ramen', icon: '🍜', label: '라면/우동/면류' },
             { val: 'katsu', icon: '🐽', label: '돈카츠/규카츠' },
+            { val: 'eel', icon: '🍱', label: '장어/덮밥' },
+            { val: 'kushikatsu', icon: '🍢', label: '쿠시카츠/튀김' },
+            { val: 'western', icon: '🍛', label: '경양식/카레' },
+            { val: 'chinese', icon: '🥟', label: '교자/만두 (551)' },
+            { val: 'fugu', icon: '🐡', label: '복어/파인다이닝' },
             { val: 'okonomiyaki', icon: '🥞', label: '오코노미야키/야키소바' },
-            { val: 'teishoku', icon: '🍱', label: '가정식/덮밥/장어' },
+            { val: 'teishoku', icon: '🍚', label: '일본 가정식' },
             { val: 'snack', icon: '🐙', label: '타코야키/간식' },
             { val: 'all', icon: '😋', label: '다 좋아! 아무거나' }
         ];
@@ -1045,7 +1169,8 @@ function updateThemeChoices() {
             { val: 'bakery', icon: '🥐', label: '빵/디저트 전문점' },
             { val: 'icecream', icon: '🍦', label: '아이스크림/빙수' },
             { val: 'parfait', icon: '🍨', label: '파르페' },
-            { val: 'traditional', icon: '🍡', label: '당고/일본 전통' },
+            { val: 'kissaten', icon: '☕', label: '레트로 킷사텐' },
+            { val: 'matcha', icon: '🍵', label: '말차/화과자' },
             { val: 'all', icon: '🍰', label: '달달한 건 다 좋아' }
         ];
     } else if (cat === 'shopping') {
@@ -1147,7 +1272,8 @@ function showRecommendations() {
                 if (theme === 'bakery' && item.sub === 'bakery') score += 50;
                 if (theme === 'icecream' && (item.sub === 'icecream' || item.desc.includes('아이스') || item.desc.includes('빙수'))) score += 50;
                 if (theme === 'parfait' && (item.sub === 'parfait' || item.desc.includes('파르페'))) score += 50;
-                if (theme === 'traditional' && (item.sub === 'traditional' || item.desc.includes('떡') || item.desc.includes('당고') || item.desc.includes('화과자') || item.desc.includes('붕어빵'))) score += 50;
+                if (theme === 'kissaten' && (item.sub === 'kissaten' || item.desc.includes('킷사텐') || item.desc.includes('다방') || item.desc.includes('레트로'))) score += 50;
+                if (theme === 'matcha' && (item.sub === 'matcha' || item.desc.includes('말차') || item.desc.includes('녹차') || item.desc.includes('화과자') || item.desc.includes('떡'))) score += 50;
                 if (theme === 'all') score += 20;
             } else if (recommendState.category === 'restaurants') {
                 const theme = recommendState.theme;
@@ -1155,12 +1281,25 @@ function showRecommendations() {
                 if (item.sub === theme) score += 30;
 
                 // Keyword Bonus for specialized items
-                if (theme === 'teishoku' && (item.desc.includes('장어') || item.desc.includes('덮밥') || item.desc.includes('가정식'))) score += 20;
+                if (theme === 'teishoku' && (item.desc.includes('가정식') || item.sub === 'teishoku')) score += 20;
+                if (theme === 'eel' && (item.sub === 'eel' || item.desc.includes('장어'))) score += 50;
+                if (theme === 'kushikatsu' && (item.sub === 'kushikatsu' || item.desc.includes('쿠시카츠') || item.desc.includes('튀김'))) score += 50;
+                if (theme === 'western' && (item.sub === 'western' || item.desc.includes('카레') || item.desc.includes('함박') || item.desc.includes('오므라이스'))) score += 50;
+                if (theme === 'chinese' && (item.sub === 'chinese' || item.desc.includes('만두') || item.desc.includes('교자') || item.desc.includes('551'))) score += 50;
+                if (theme === 'fugu' && (item.sub === 'fugu' || item.desc.includes('복어'))) score += 50;
+
                 if (theme === 'yakiniku' && (item.desc.includes('호르몬') || item.desc.includes('곱창') || item.desc.includes('와규'))) score += 20;
                 if (theme === 'snack' && (item.desc.includes('타코야키'))) score += 20;
+            } else if (recommendState.category === 'shopping') {
+                const theme = recommendState.theme;
+                if (theme === 'vintage' && (item.sub === 'vintage' || item.desc.includes('구제'))) score += 50;
+                if (theme === 'hobby' && (item.sub === 'hobby' || item.desc.includes('피규어') || item.desc.includes('게임'))) score += 50;
+                if (theme === 'dept' && (item.sub === 'dept' || item.desc.includes('백화점'))) score += 50;
+                if (theme === 'street' && item.sub === 'street') score += 50;
+                if (theme === 'all') score += 20;
             }
 
-            // Fallback for other categories (Shopping, Bars, etc.)
+            // Fallback for other categories (Bars, etc.)
             if (recommendState.theme === 'all' || item.sub === recommendState.theme) score += 10;
         }
 
@@ -1248,7 +1387,17 @@ function setupShoppingTracker() {
         btn.onclick = () => {
             document.querySelectorAll('.st-area').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            stState.area = btn.dataset.area;
+            const area = btn.dataset.area;
+
+            if (area === 'current') {
+                btn.textContent = '📍 위치 확인 중...';
+                updateUserLocation(() => {
+                    stState.area = 'current';
+                    btn.textContent = '📍 내 위치 (확인 완료)';
+                });
+            } else {
+                stState.area = area;
+            }
         };
     });
 
@@ -1314,12 +1463,36 @@ function showShoppingResults() {
             return n.includes(query) || d.includes(query);
         });
     }
-    if (stState.area !== 'all') pool = pool.filter(i => i.area === stState.area);
+    if (stState.area !== 'all' && stState.area !== 'current') {
+        pool = pool.filter(i => i.area === stState.area);
+    }
+
+    // Sort by Distance if 'current' is selected
+    if (stState.area === 'current' && state.userLocation) {
+        pool.sort((a, b) => {
+            const cA = AREA_COORDS[a.area] || AREA_COORDS.others;
+            const cB = AREA_COORDS[b.area] || AREA_COORDS.others;
+            const distA = getDistance(state.userLocation.lat, state.userLocation.lng, cA.lat, cA.lng);
+            const distB = getDistance(state.userLocation.lat, state.userLocation.lng, cB.lat, cB.lng);
+            return distA - distB; // Closest first
+        });
+    }
 
     if (pool.length === 0) {
         list.innerHTML = `<p style="grid-column:1/-1; text-align:center; padding:20px;">조건에 맞는 상점이 없습니다.</p>`;
     } else {
-        list.innerHTML = pool.map(item => generateCardHtml(item, 'shopping')).join('');
+        // Render Best Match (First Item) + Rest
+        list.innerHTML = pool.map((item, index) => {
+            const isBestMatch = index === 0;
+            const cardHtml = generateCardHtml(item, 'shopping');
+
+            if (isBestMatch) {
+                const badge = `<div class="best-match-badge">👑 Best Match</div>`;
+                return `<div class="best-match-card">${badge}${cardHtml}</div>`;
+            } else {
+                return cardHtml;
+            }
+        }).join('');
     }
     lucide.createIcons();
 }
@@ -1457,6 +1630,156 @@ function showWcWinner(winner) {
     document.getElementById('wc-game-view').classList.add('hidden');
     document.getElementById('wc-winner').classList.remove('hidden');
     document.getElementById('wc-winner-display').innerHTML = generateCardHtml(winner, 'mixed');
+    lucide.createIcons();
+}
+
+// --- Korean Chosung Search Utility ---
+function getChosung(str) {
+    const cho = ["ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"];
+    let result = "";
+    for (let i = 0; i < str.length; i++) {
+        const code = str.charCodeAt(i) - 44032;
+        if (code > -1 && code < 11172) {
+            result += cho[Math.floor(code / 588)];
+        } else {
+            result += str.charAt(i);
+        }
+    }
+    return result;
+}
+
+// --- Global Spotlight Search Logic ---
+function setupSearch() {
+    const trigger = document.getElementById('search-trigger');
+    const container = document.getElementById('search-container');
+    const modal = document.getElementById('search-modal');
+    const closeBtn = document.getElementById('close-search-modal');
+    const input = document.getElementById('global-search-input');
+
+    if (!trigger || !container) return;
+
+    trigger.addEventListener('click', () => {
+        container.classList.remove('hidden');
+        document.body.classList.add('no-scroll');
+        input.value = ''; // Clear input on open
+        document.getElementById('search-results').innerHTML = '';
+        document.getElementById('search-placeholder').classList.remove('hidden');
+        setTimeout(() => input.focus(), 100); // Auto focus
+    });
+
+    closeBtn.addEventListener('click', () => {
+        container.classList.add('hidden');
+        document.body.classList.remove('no-scroll');
+    });
+
+    // Close on background click (click on container, not modal)
+    container.addEventListener('click', (e) => {
+        if (e.target === container) {
+            container.classList.add('hidden');
+            document.body.classList.remove('no-scroll');
+        }
+    });
+
+    // Close on ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !container.classList.contains('hidden')) {
+            container.classList.add('hidden');
+            document.body.classList.remove('no-scroll');
+        }
+    });
+
+    input.addEventListener('input', (e) => {
+        const query = e.target.value.trim();
+        if (query.length > 0) {
+            const results = searchAll(query);
+            renderSearchResults(results);
+        } else {
+            document.getElementById('search-results').innerHTML = '';
+            document.getElementById('search-placeholder').classList.remove('hidden');
+        }
+    });
+}
+
+function searchAll(query) {
+    // Normalize query: remove spaces, lowercase
+    const qRaw = query.toLowerCase();
+    const qNoSpace = qRaw.replace(/\s/g, '');
+
+    const allItems = [
+        ...state.restaurants,
+        ...state.desserts,
+        ...state.shopping,
+        ...state.bars,
+        ...state.activities
+    ];
+
+    const matched = allItems.filter(item => {
+        // Normalize target strings
+        const name = item.name.toLowerCase();
+        const nameNoSpace = name.replace(/\s/g, '');
+        const desc = (item.desc || "").toLowerCase().replace(/\s/g, '');
+        const sub = (item.sub || "").toLowerCase().replace(/\s/g, '');
+        const area = (item.area || "").toLowerCase().replace(/\s/g, '');
+
+        // Chosung check for name
+        const nameCho = getChosung(nameNoSpace);
+
+        const nameMatch = nameNoSpace.includes(qNoSpace) || nameCho.includes(qNoSpace);
+        const descMatch = desc.includes(qNoSpace);
+        const subMatch = sub.includes(qNoSpace);
+        const areaMatch = area.includes(qNoSpace);
+
+        return nameMatch || descMatch || subMatch || areaMatch;
+    });
+
+    return matched.sort((a, b) => {
+        const aName = a.name.toLowerCase().replace(/\s/g, '');
+        const bName = b.name.toLowerCase().replace(/\s/g, '');
+
+        // Exact name match or start with priority
+        const aStarts = aName.startsWith(qNoSpace);
+        const bStarts = bName.startsWith(qNoSpace);
+
+        if (aStarts && !bStarts) return -1;
+        if (!aStarts && bStarts) return 1;
+
+        // Name match priority
+        if (aName.includes(qNoSpace) && !bName.includes(qNoSpace)) return -1;
+        if (!aName.includes(qNoSpace) && bName.includes(qNoSpace)) return 1;
+
+        return 0;
+    });
+}
+
+function renderSearchResults(items) {
+    const list = document.getElementById('search-results');
+    const placeholder = document.getElementById('search-placeholder');
+
+    if (items.length === 0) {
+        list.innerHTML = `<p style="text-align:center; padding:20px; color:var(--text-muted);">검색 결과가 없습니다.</p>`;
+        placeholder.classList.add('hidden');
+        return;
+    }
+
+    placeholder.classList.add('hidden');
+    // Simplified structure for Spotlight search results
+    list.innerHTML = items.map(item => `
+        <div class="spotlight-result-item" onclick="window.open('https://www.google.com/search?q=${encodeURIComponent(item.name + ' 오사카')}', '_blank')">
+            <div class="result-icon">
+                <i data-lucide="${item.sub === 'ramen' ? 'soup' : (item.sub === 'sushi' ? 'fish' : 'map-pin')}"></i>
+            </div>
+            <div class="result-info">
+                <div class="result-title-row">
+                    <span class="result-name">${item.name}</span>
+                    <span class="result-meta">${item.area} · ${item.sub}</span>
+                </div>
+                <p class="result-desc">${item.desc}</p>
+            </div>
+            <div class="result-chevron">
+                <i data-lucide="chevron-right"></i>
+            </div>
+        </div>
+    `).join('');
     lucide.createIcons();
 }
 
@@ -1686,7 +2009,58 @@ const TIPS_DATA = [
     { title: "소지품 분실 시", category: "safety", icon: "help-circle", desc: "일본은 분실물을 찾을 확률이 매우 높습니다. 당황하지 말고 근처 파출소(코반, 交番)에 가서 유실물 신고를 하세요." }
 ];
 
-// PHRASES_DATA is now loaded from phrases_data.js
+const PHRASES_DATA = [
+    // --- Basic 인사/기본 ---
+    { kr: "안녕하세요 (낮)", jp: "こんにちは", pronunciation: "곤니치와", category: "basic" },
+    { kr: "안녕하세요 (저녁)", jp: "こんばんは", pronunciation: "곤반와", category: "basic" },
+    { kr: "감사합니다", jp: "ありがとうございます", pronunciation: "아리가토- 고자이마스", category: "basic" },
+    { kr: "죄송합니다 / 실례합니다", jp: "すみません", pronunciation: "스미마센", category: "basic" },
+    { kr: "네 / 아니요", jp: "はい / いいえ", pronunciation: "하이 / 이이에", category: "basic" },
+    { kr: "부탁합니다", jp: "お願いします", pronunciation: "오네가이시마스", category: "basic" },
+    { kr: "일본어 못해요", jp: "日本語、できません", pronunciation: "니혼고, 데키마센", category: "basic" },
+
+    // --- Dining 식당/카페 ---
+    { kr: "메뉴판 주세요", jp: "メニューください", pronunciation: "메뉴- 쿠다사이", category: "dining" },
+    { kr: "추천 메뉴는 무엇인가요?", jp: "おすすめはなんですか？", pronunciation: "오스스메와 난데스카?", category: "dining" },
+    { kr: "이거 하나 주세요", jp: "これ一つください", pronunciation: "코레 히토츠 쿠다사이", category: "dining" },
+    { kr: "생맥주 한 잔 주세요", jp: "生ビール一つください", pronunciation: "나마비-루 히토츠 쿠다사이", category: "dining" },
+    { kr: "맛있어요!", jp: "おいしいです！", pronunciation: "오이시- 데스!", category: "dining" },
+    { kr: "계산 부탁드립니다", jp: "お会計お願いします", pronunciation: "오카이케이 오네가이시마스", category: "dining" },
+    { kr: "잘 먹었습니다", jp: "ごちそうさまでした", pronunciation: "고치소-사마 데시타", category: "dining" },
+    { kr: "영문 메뉴판 있나요?", jp: "英語のメニューありますか？", pronunciation: "에-고노 메뉴- 아리마스카?", category: "dining" },
+    { kr: "와이파이 되나요?", jp: "Wi-Fiありますか？", pronunciation: "와이파이 아리마스카?", category: "dining" },
+
+    // --- Social/Hunting 친목/헌팅 ---
+    { kr: "같이 마실래요?", jp: "一緒に飲みませんか？", pronunciation: "잇쇼니 노미마센카?", category: "social" },
+    { kr: "옆자리 비어있나요?", jp: "隣、空いてますか？", pronunciation: "토나리, 아이테마스카?", category: "social" },
+    { kr: "어디서 오셨어요?", jp: "どこから来ましたか？", pronunciation: "도코카라 키마시타카?", category: "social" },
+    { kr: "한국인인가요?", jp: "韓国人ですか？", pronunciation: "칸코쿠진 데스카?", category: "social" },
+    { kr: "몇 살이에요?", jp: "何歳ですか？", pronunciation: "난사이 데스카?", category: "social" },
+    { kr: "직업이 뭐예요?", jp: "お仕事は何ですか？", pronunciation: "오시고토와 난데스카?", category: "social" },
+    { kr: "대박! / 진짜요?", jp: "すごい！ / 本当に？", pronunciation: "스고이! / 혼토-니?", category: "social" },
+    { kr: "건배!", jp: "乾杯！", pronunciation: "칸파이!", category: "social" },
+    { kr: "LINE 아이디 알려주세요", jp: "LINE交換しませんか？", pronunciation: "라인 코-칸 시마센카?", category: "social" },
+    { kr: "내일 뭐 하세요?", jp: "明日、何しますか？", pronunciation: "아시타, 나니시마스카?", category: "social" },
+    { kr: "오늘 즐거웠어요", jp: "今日は楽しかったです", pronunciation: "쿄-와 타노시캇타 데스", category: "social" },
+    { kr: "술 마시는 거 좋아해요?", jp: "お酒飲むの好きですか？", pronunciation: "오사케 노무노 스키 데스카?", category: "social" },
+    { kr: "오사카 처음 왔어요", jp: "大阪은初めてです", pronunciation: "오사카와 하지메테 데스", category: "social" },
+
+    // --- Travel 이동/길찾기 ---
+    { kr: "~역은 어디인가요?", jp: "〜駅はどこですか？", pronunciation: "~에키와 도코데스카?", category: "travel" },
+    { kr: "화장실은 어디인가요?", jp: "お手洗いはどこですか？", pronunciation: "오테아라이와 도코데스카?", category: "travel" },
+    { kr: "편의점은 어디인가요?", jp: "コンビニは 어디ですか？", pronunciation: "콘비니와 도코데스카?", category: "travel" },
+    { kr: "얼마인가요?", jp: "いくらですか？", pronunciation: "이쿠라 데스카?", category: "travel" },
+    { kr: "가장 가까운 역은 어디죠?", jp: "一番近い駅はどこですか？", pronunciation: "이치반 치카이 에키와 도코데스카?", category: "travel" },
+    { kr: "여기서 멀어요?", jp: "ここから遠いですか？", pronunciation: "코코카라 토-이 데스카?", category: "travel" },
+
+    // --- Emergency 위급상황 ---
+    { kr: "도와주세요!", jp: "助けてください！", pronunciation: "타스케테 쿠다사이!", category: "emergency" },
+    { kr: "길을 잃었어요", jp: "道に迷いました", pronunciation: "미치니 마요이마시타", category: "emergency" },
+    { kr: "지갑을 잃어버렸어요", jp: "財布をなくしました", pronunciation: "사이후오 나쿠시마시타", category: "emergency" },
+    { kr: "경찰서가 어디죠?", jp: "交番はどこですか？", pronunciation: "코-반와 도코데스카?", category: "emergency" },
+    { kr: "한국어 할 수 있는 사람 있나요?", jp: "韓国語話せる人いますか？", pronunciation: "칸코쿠고 하나세루 히토 이마스카?", category: "emergency" },
+    { kr: "아파요 (병원 가고 싶어요)", jp: "気分が悪いです (病院行きたい)", pronunciation: "키분가 와루이 데스 (뵤-인 이키타이)", category: "emergency" }
+];
 
 
 function setupTravelTips() {
@@ -1802,7 +2176,7 @@ function renderPhrasebook(category = 'all') {
             </div>
             <div style="background:rgba(0,0,0,0.2); padding:15px; border-radius:12px; border:1px solid rgba(255,255,255,0.02);">
                 <h4 style="font-size:22px; margin:0 0 5px 0; color:#fff; font-family:'Noto Sans JP', sans-serif;">${p.jp}</h4>
-                <p style="font-size:14px; margin:0; color:var(--text-dim); font-style:italic;">${p.romaji}</p>
+                <p style="font-size:14px; margin:0; color:var(--text-dim); font-style:italic;">${p.pronunciation}</p>
             </div>
             <button onclick="copyPhrase('${p.jp}')" style="background:rgba(255,255,255,0.05); border:none; color:#fff; padding:8px; border-radius:8px; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; font-size:12px; transition:all 0.2s;">
                 <i data-lucide="copy" style="width:14px; height:14px;"></i> 복사하기
