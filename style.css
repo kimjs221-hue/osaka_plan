@@ -218,6 +218,172 @@ section.active {
 }
 
 /* Dashboard Styles */
+/* Survival Japanese Quick Board */
+.quick-board {
+    background: linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(139, 92, 246, 0.1));
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.quick-board-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.toggle-board-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 99px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.toggle-board-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.toggle-board-btn i {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.3s ease;
+}
+
+.quick-board-content {
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    max-height: 2000px;
+    /* Large enough to show all */
+}
+
+.quick-board-content.collapsed {
+    max-height: 180px;
+    /* Roughly 2 rows on mobile/small screens */
+    mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+}
+
+.quick-phrases-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.quick-phrase-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.quick-phrase-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    border-color: var(--secondary);
+}
+
+.quick-phrase-card:active {
+    transform: scale(0.98);
+}
+
+.phrase-ko {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.phrase-jp {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: "Noto Sans JP", sans-serif;
+    word-break: keep-all;
+}
+
+.show-clerk-btn {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    color: var(--secondary);
+    opacity: 0.6;
+}
+
+/* Show to Clerk Modal */
+#show-clerk-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    z-index: 9999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.show-clerk-content {
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+    padding: 20px;
+}
+
+.clerk-text-jp {
+    font-size: 48px;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 20px;
+    line-height: 1.25;
+    word-break: keep-all;
+}
+
+.clerk-text-ko {
+    font-size: 24px;
+    color: var(--text-dim);
+    margin-bottom: 40px;
+}
+
+.close-clerk-btn {
+    background: #fff;
+    color: #000;
+    border: none;
+    padding: 16px 40px;
+    border-radius: 99px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.close-clerk-btn:active {
+    transform: scale(0.95);
+}
+
+@media (max-width: 480px) {
+    .clerk-text-jp {
+        font-size: 32px;
+    }
+}
+
 .stats-grid {
     display: grid;
     gap: 20px;
@@ -2230,8 +2396,6 @@ section.active {
 
 /* --- Mobile Specific Polish (Bottom Sheet Style) --- */
 @media (max-width: 1024px) {
-
-    /* Use a completely solid opaque black background for the modal */
     .search-modal-content {
         background: #000000 !important;
         opacity: 1 !important;
@@ -2242,12 +2406,9 @@ section.active {
         border-radius: 24px;
         margin: 0 auto;
         animation: spotlightPop 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-
-        /* Ensure no child elements re-apply styles */
         box-shadow: none !important;
     }
 
-    /* Solid background for results too */
     .spotlight-results {
         background: #000000 !important;
     }
@@ -2257,6 +2418,57 @@ section.active {
         padding: 1rem 1rem 1rem 3rem;
         height: 50px;
         background: #000000 !important;
+    }
+}
+
+/* --- Guides & Tips Grid Styling --- */
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 10px 0;
+}
+
+.tip-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tip-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.tip-icon-header {
+    margin-bottom: 4px;
+}
+
+.animate-in {
+    animation: slideInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 480px) {
+    .tips-grid {
+        grid-template-columns: 1fr;
     }
 }
 
