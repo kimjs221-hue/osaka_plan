@@ -52,7 +52,7 @@
                     <i data-lucide="dumbbell"></i> <span>놀거리 & 활동</span>
                 </li>
                 <li data-section="convenience">
-                    <i data-lucide="store"></i> <span>편의점</span>
+                    <i data-lucide="store"></i> <span>편의점/칼디</span>
                 </li>
                 <li data-section="map">
                     <i data-lucide="map-pin"></i> <span>숙소 위치</span>
@@ -95,7 +95,7 @@
                     </div>
                     <div class="hub-item" data-section="convenience">
                         <div class="bubble"><i data-lucide="store"></i></div>
-                        <span>편의점</span>
+                        <span>편의점/칼디</span>
                     </div>
                     <div class="hub-item" data-section="map">
                         <div class="bubble"><i data-lucide="map-pin"></i></div>
@@ -134,6 +134,12 @@
                     <p id="section-desc">오사카 여행 계획 레츠고</p>
                 </div>
                 <div class="header-right">
+                    <button id="search-trigger" class="btn-icon" aria-label="검색">
+                        <i data-lucide="search"></i>
+                    </button>
+                    <!-- <button id="theme-toggle" class="btn-icon">
+                        <i data-lucide="moon"></i>
+                    </button> -->
                     <div class="trip-dates">
                         <i data-lucide="calendar-range"></i>
                         <span id="display-dates">2025-12-31 ~ 2026-01-04</span>
@@ -179,6 +185,32 @@
                             <div class="stat-info">
                                 <h3>흡연구역</h3>
                                 <p>오사카 매너 맵</p>
+                            </div>
+                        </div>
+                        <div class="stat-card clickable" id="start-travel-tips">
+                            <i data-lucide="lightbulb" style="color: #fbbf24;"></i>
+                            <div class="stat-info">
+                                <h3>현지 꿀팁</h3>
+                                <p>여행 전문가 노하우</p>
+                            </div>
+                        </div>
+                        <div class="stat-card clickable" id="start-phrasebook">
+                            <i data-lucide="languages" style="color: #60a5fa;"></i>
+                            <div class="stat-info">
+                                <h3>실전 일본어</h3>
+                                <p>바로 쓰는 핵심 회화</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- New Dynamic Widgets -->
+                    <div class="dashboard-widgets" style="margin-top: 24px;">
+                        <div class="widget-card tip-widget"
+                            style="background: rgba(30, 41, 59, 0.5); border-radius: 20px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 12px;">
+                            <div class="tip-icon" style="font-size: 24px;">💡</div>
+                            <div>
+                                <h4 style="font-size: 13px; margin: 0; color: var(--text-dim);">오사카 에스컬레이터</h4>
+                                <p style="font-size: 11px; margin: 2px 0 0; color: var(--text-dim);">오른쪽 서기 명심!</p>
                             </div>
                         </div>
                     </div>
@@ -308,6 +340,7 @@
                             <button class="filter-btn" data-area="shinsaibashi">신사이바시</button>
                             <button class="filter-btn" data-area="namba">난바/도톤보리</button>
                             <button class="filter-btn" data-area="umeda">우메다</button>
+                            <button class="filter-btn" data-area="kitashinchi">기타신치</button>
                             <button class="filter-btn" data-area="tenma">텐마</button>
                             <button class="filter-btn" data-area="nipponbashi">닛폰바시</button>
                             <button class="filter-btn" data-area="tennoji">텐노지</button>
@@ -320,8 +353,15 @@
                             <button class="filter-btn" data-filter="yakiniku">야키니쿠</button>
                             <button class="filter-btn" data-filter="katsu">돈카츠/규카츠</button>
                             <button class="filter-btn" data-filter="udon">우동/소바</button>
-                            <button class="filter-btn" data-filter="okonomiyaki">오코노미야키</button>
+                            <button class="filter-btn" data-filter="okonomiyaki">오코노미야키/야키소바</button>
+                            <button class="filter-btn" data-filter="teppanyaki">철판요리/스테이크</button>
+                            <button class="filter-btn" data-filter="oden">오뎅/나베</button>
                             <button class="filter-btn" data-filter="teishoku">일본 가정식</button>
+                            <button class="filter-btn" data-filter="eel">장어/덮밥</button>
+                            <button class="filter-btn" data-filter="kushikatsu">쿠시카츠</button>
+                            <button class="filter-btn" data-filter="western">경양식/카레</button>
+                            <button class="filter-btn" data-filter="chinese">교자/만두</button>
+                            <button class="filter-btn" data-filter="fugu">복어/고급</button>
                             <button class="filter-btn" data-filter="snack">타코야키/간식</button>
                             <button class="filter-btn" data-filter="izakaya">이자카야/술집</button>
                             <button class="filter-btn" data-filter="others">기타</button>
@@ -359,9 +399,10 @@
                             <button class="filter-btn active" data-filter="all">전체</button>
                             <button class="filter-btn" data-filter="cafe">카페/팬케이크</button>
                             <button class="filter-btn" data-filter="bakery">베이커리/케이크</button>
+                            <button class="filter-btn" data-filter="kissaten">레트로/킷사텐</button>
+                            <button class="filter-btn" data-filter="matcha">말차/전통</button>
                             <button class="filter-btn" data-filter="icecream">아이스크림/빙수</button>
                             <button class="filter-btn" data-filter="parfait">파르페</button>
-                            <button class="filter-btn" data-filter="traditional">당고/일본 전통</button>
                         </div>
                         <div class="sort-filter-bar" data-for="desserts">
                             <span class="filter-label">정렬:</span>
@@ -421,7 +462,8 @@
                             <button class="filter-btn active" data-area="all">전체</button>
                             <button class="filter-btn" data-area="shinsaibashi">신사이바시/난바</button>
                             <button class="filter-btn" data-area="umeda">우메다</button>
-                            <button class="filter-btn" data-area="umeda">우메다</button>
+                            <button class="filter-btn" data-area="kitashinchi">기타신치</button>
+                            <button class="filter-btn" data-area="tenma">텐마</button>
                             <button class="filter-btn" data-area="tennoji">텐노지</button>
                             <button class="filter-btn" data-area="osakabay">오사카항/기타</button>
                         </div>
@@ -457,6 +499,8 @@
                             <button class="filter-btn" data-area="shinsaibashi">신사이바시</button>
                             <button class="filter-btn" data-area="namba">난바/우라난바</button>
                             <button class="filter-btn" data-area="umeda">우메다</button>
+                            <button class="filter-btn" data-area="kitashinchi">기타신치</button>
+                            <button class="filter-btn" data-area="tenma">텐마</button>
                             <button class="filter-btn" data-area="tennoji">텐노지</button>
                         </div>
                         <div class="filter-bar" data-for="bars">
@@ -482,7 +526,7 @@
                 <!-- Convenience Store Section -->
                 <section id="convenience">
                     <div class="section-header">
-                        <h3>🏪 편의점 필수 먹거리</h3>
+                        <h3>🏪 편의점/칼디 필수템</h3>
                     </div>
                     <div class="filter-group">
                         <div class="filter-bar" data-for="convenience">
@@ -491,6 +535,7 @@
                             <button class="filter-btn" data-filter="seven">세븐일레븐</button>
                             <button class="filter-btn" data-filter="lawson">로손</button>
                             <button class="filter-btn" data-filter="family">패밀리마트</button>
+                            <button class="filter-btn" data-filter="kaldi">칼디(Kaldi)</button>
                             <button class="filter-btn" data-filter="others">기타</button>
                         </div>
                         <div class="sort-filter-bar" data-for="convenience">
@@ -656,29 +701,53 @@
                 <div id="st-wizard">
                     <div class="st-step active" data-step="1">
                         <h5 style="text-align: center; margin-bottom: 25px;">찾고 계신 브랜드가 있나요?</h5>
-                        <div class="choice-grid"
-                            style="grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px;">
-                            <div class="choice-item st-style" data-style="gu">GU</div>
-                            <div class="choice-item st-style" data-style="zara">ZARA</div>
-                            <div class="choice-item st-style" data-style="hnm">H&M</div>
-                            <div class="choice-item st-style" data-style="nike">나이키</div>
-                            <div class="choice-item st-style" data-style="adidas">아디다스</div>
-                            <div class="choice-item st-style" data-style="abc">ABC마트</div>
-                            <div class="choice-item st-style" data-style="mont">몽벨</div>
-                            <div class="choice-item st-style" data-style="muji">무인양품</div>
-                            <div class="choice-item st-style" data-style="lush">러쉬</div>
-                            <div class="choice-item st-style" data-style="supreme">슈프림</div>
-                            <div class="choice-item st-style" data-style="stussy">스투시</div>
-                            <div class="choice-item st-style" data-style="human">휴먼메이드</div>
-                            <div class="choice-item st-style" data-style="bape">베이프</div>
-                            <div class="choice-item st-style" data-style="beams">빔즈</div>
-                            <div class="choice-item st-style" data-style="porter">포터</div>
-                            <div class="choice-item st-style" data-style="vivienne">비비안</div>
-                            <div class="choice-item st-style" data-style="issey">이세이</div>
-                            <div class="choice-item st-style" data-style="margiela">마르지엘라</div>
-                            <div class="choice-item st-style" data-style="vintage">빈티지</div>
-                            <div class="choice-item st-style" data-style="all"
-                                style="background: var(--primary); color: white;">전부 보기</div>
+                        <div class="st-category-scroll">
+                            <div class="st-group">
+                                <h6>캐주얼 & SPA</h6>
+                                <div class="choice-grid mini">
+                                    <div class="choice-item st-style" data-style="gu">GU</div>
+                                    <div class="choice-item st-style" data-style="zara">ZARA</div>
+                                    <div class="choice-item st-style" data-style="hnm">H&M</div>
+                                    <div class="choice-item st-style" data-style="muji">무인양품</div>
+                                </div>
+                            </div>
+                            <div class="st-group">
+                                <h6>스포츠 & 스트릿</h6>
+                                <div class="choice-grid mini">
+                                    <div class="choice-item st-style" data-style="nike">나이키</div>
+                                    <div class="choice-item st-style" data-style="adidas">아디다스</div>
+                                    <div class="choice-item st-style" data-style="supreme">슈프림</div>
+                                    <div class="choice-item st-style" data-style="stussy">스투시</div>
+                                    <div class="choice-item st-style" data-style="human">휴먼메이드</div>
+                                    <div class="choice-item st-style" data-style="bape">베이프</div>
+                                    <div class="choice-item st-style" data-style="abc">ABC마트</div>
+                                </div>
+                            </div>
+                            <div class="st-group">
+                                <h6>럭셔리 & 편집샵</h6>
+                                <div class="choice-grid mini">
+                                    <div class="choice-item st-style" data-style="beams">빔즈</div>
+                                    <div class="choice-item st-style" data-style="porter">포터</div>
+                                    <div class="choice-item st-style" data-style="vivienne">비비안</div>
+                                    <div class="choice-item st-style" data-style="issey">이세이</div>
+                                    <div class="choice-item st-style" data-style="margiela">마르지엘라</div>
+                                </div>
+                            </div>
+                            <div class="st-group">
+                                <h6>취미 & 라이프</h6>
+                                <div class="choice-grid mini">
+                                    <div class="choice-item st-style" data-style="lush">러쉬</div>
+                                    <div class="choice-item st-style" data-style="mont">몽벨</div>
+                                    <div class="choice-item st-style" data-style="vintage">빈티지</div>
+                                    <div class="choice-item st-style" data-style="anime">애니/피규어</div>
+                                    <div class="choice-item st-style" data-style="100yen">100엔샵</div>
+                                    <div class="choice-item st-style" data-style="drug">드럭스토어</div>
+                                </div>
+                            </div>
+                            <div class="st-group">
+                                <div class="choice-item st-style" data-style="all"
+                                    style="width:100%; background: var(--primary); color: white;">전부 보기</div>
+                            </div>
                         </div>
                     </div>
                     <div class="st-step hidden" data-step="2">
@@ -691,6 +760,8 @@
                             <div class="choice-item st-area" data-area="umeda">우메다</div>
                             <div class="choice-item st-area" data-area="nipponbashi">닛폰바시</div>
                             <div class="choice-item st-area" data-area="tennoji">텐노지</div>
+                            <div class="choice-item st-area" data-area="current"
+                                style="background:var(--primary); color:white;">📍 내 위치 (가까운 순)</div>
                         </div>
                     </div>
                     <div class="st-step hidden" data-step="3">
@@ -723,6 +794,8 @@
                         <div class="choice-item wc-cat" data-cat="restaurants"><i>🍣</i>오사카 맛집</div>
                         <div class="choice-item wc-cat" data-cat="teishoku"><i>🍱</i>일본 가정식</div>
                         <div class="choice-item wc-cat" data-cat="bars"><i>🍹</i>술집 & 바</div>
+                        <div class="choice-item wc-cat" data-cat="desserts"><i>🍰</i>카페/디저트</div>
+                        <div class="choice-item wc-cat" data-cat="shopping"><i>🛍️</i>쇼핑/빈티지</div>
                         <div class="choice-item wc-cat" data-cat="activities"><i>🎢</i>랜드마크/테마</div>
                     </div>
                     <h5 style="text-align: center; margin-bottom: 20px;">선호 지역이 있나요?</h5>
@@ -1055,6 +1128,26 @@
     </div>
 
     <script src="phrases_data.js"></script>
+    <!-- Spotlight Search Modal (Proper Structure) -->
+    <div id="search-container" class="modal-container hidden">
+        <div id="search-modal" class="search-modal-content">
+            <div class="search-spotlight-container">
+                <div class="search-input-wrapper spotlight-input">
+                    <i data-lucide="search" class="search-icon"></i>
+                    <input type="text" id="global-search-input" placeholder="어디로 갈까요? (맛집, 쇼핑, 지역 검색)"
+                        autocomplete="off">
+                    <button class="close-modal-btn" id="close-search-modal"><i data-lucide="x"></i></button>
+                </div>
+                <div id="search-results" class="content-grid spotlight-results">
+                    <!-- Search Results -->
+                </div>
+                <div id="search-placeholder" class="empty-state">
+                    <p>입력하는 순간, 오사카의 모든 곳을 찾아드립니다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js?v=37"></script>
     <script>
         lucide.createIcons();
