@@ -762,11 +762,17 @@ function setupEventListeners() {
         if (btn.classList.contains('active')) {
             if (!state.filters[section].sorts.includes(sortVal)) {
                 state.filters[section].sorts.push(sortVal);
+            }
 
-                // If sorting by distance, try to get current location
-                if (sortVal === 'distance' && !state.userLocation) {
-                    updateUserLocation(() => renderSection(section));
-                }
+            // Always trigger location update if distance sort is turned 'ON'
+            if (sortVal === 'distance') {
+                const originalHtml = btn.innerHTML;
+                btn.innerHTML = '📍 확인 중...';
+                updateUserLocation(() => {
+                    btn.innerHTML = originalHtml;
+                    renderSection(section);
+                    alert('현재 위치에서 가장 가까운 순서대로 정렬되었습니다.');
+                });
             }
         } else {
             state.filters[section].sorts = state.filters[section].sorts.filter(s => s !== sortVal);
@@ -855,6 +861,24 @@ const AREA_COORDS = {
 };
 
 function updateUserLocation(callback) {
+    // Basic Persistence: Try to load from localStorage first if null
+    if (!state.userLocation) {
+        const saved = localStorage.getItem('osaka_user_location');
+        if (saved) {
+            state.userLocation = JSON.parse(saved);
+        }
+    }
+
+    if (!window.isSecureContext) {
+        console.warn('Insecure context detected. Geolocation might fail.');
+        // Show warning but don't hard-block, let the geolocation call try anyway
+        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+
+        if (isIOS && isStandalone) {
+            // alert('아이폰 홈 화면(앱 모드)에서는 보안상 HTTPS가 아니면 위치 권한이 아예 뜨지 않습니다. (Safari 브라우저에서 실행하거나, HTTPS 호스팅이 필요합니다)');
+        }
+    }
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (pos) => {
@@ -862,6 +886,7 @@ function updateUserLocation(callback) {
                     lat: pos.coords.latitude,
                     lng: pos.coords.longitude
                 };
+                localStorage.setItem('osaka_user_location', JSON.stringify(state.userLocation));
                 console.log('User location updated:', state.userLocation);
                 if (callback) callback();
             },
@@ -952,6 +977,14 @@ function generateCardHtml(item, type) {
         </div>
     ` : '';
 
+    // Calculate distance if user location is available
+    let locationBadgeHtml = `<div class="travel-time-badge"><i data-lucide="navigation"></i> 숙소에서 ${item.time}</div>`;
+    if (state.userLocation && type !== 'convenience') {
+        const itemCoords = AREA_COORDS[item.area] || AREA_COORDS.others;
+        const dist = getDistance(state.userLocation.lat, state.userLocation.lng, itemCoords.lat, itemCoords.lng);
+        locationBadgeHtml = `<div class="travel-time-badge" style="background:var(--secondary); color:white;"><i data-lucide="map-pin"></i> 📍 현재 위치에서 ${dist.toFixed(1)}km</div>`;
+    }
+
     return `
         <div class="info-card-item clickable-card" onclick="window.open('${searchUrl}', '_blank')">
             <div class="card-header">
@@ -963,7 +996,7 @@ function generateCardHtml(item, type) {
                 </div>
             </div>
             <h4>${item.name}</h4>
-            ${type !== 'convenience' ? `<div class="travel-time-badge"><i data-lucide="navigation"></i> 숙소에서 ${item.time}</div>` : ''}
+            ${type !== 'convenience' ? locationBadgeHtml : ''}
             ${waitIndicator}
             
             ${item.hours ? `<div class="card-info-row"><span class="label">운영시간</span><span class="val" style="color:var(--secondary)">${item.hours}</span></div>` : ''}
