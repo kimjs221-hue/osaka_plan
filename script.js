@@ -848,6 +848,8 @@ const AREA_COORDS = {
     umeda: { lat: 34.7024, lng: 135.4959 },
     tenma: { lat: 34.7042, lng: 135.5126 },
     nipponbashi: { lat: 34.6655, lng: 135.5058 },
+    tennoji: { lat: 34.6472, lng: 135.5133 },
+    kitashinchi: { lat: 34.6967, lng: 135.5005 },
     osakabay: { lat: 34.6558, lng: 135.4326 },
     others: { lat: 34.6850, lng: 135.5170 }
 };
@@ -864,8 +866,18 @@ function updateUserLocation(callback) {
                 if (callback) callback();
             },
             (err) => {
-                console.warn('Geolocation error:', err.message);
-                alert('현재 위치를 가져올 수 없어 숙소 기준으로 정렬됩니다.');
+                console.warn('Geolocation error:', err.message, err.code);
+                let msg = '현재 위치를 가져올 수 없어 숙소 기준으로 정렬됩니다.';
+                if (err.code === 1) msg = '위치 정보 권한이 거부되었습니다. 브라우저 설정에서 권한을 허용해주세요.';
+                else if (err.code === 2) msg = '위치 정보를 사용할 수 없습니다. GPS 신호를 확인해주세요.';
+                else if (err.code === 3) msg = '위치 정보 요청 시간이 초과되었습니다.';
+
+                alert(msg);
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
             }
         );
     } else {
@@ -903,8 +915,10 @@ function getFilteredData(type) {
                         const cB = AREA_COORDS[b.area] || AREA_COORDS.others;
                         const dA = getDistance(state.userLocation.lat, state.userLocation.lng, cA.lat, cA.lng);
                         const dB = getDistance(state.userLocation.lat, state.userLocation.lng, cB.lat, cB.lng);
-                        scoreA += Math.max(0, 10 - dA) * 1000;
-                        scoreB += Math.max(0, 10 - dB) * 1000;
+                        // Changed from bonus-based (clamped at 10km) to penalty-based
+                        // This ensures sorting works even if you are far away (e.g. testing from Korea)
+                        scoreA -= dA * 1000;
+                        scoreB -= dB * 1000;
                     } else {
                         const tA = getTimeMinutes(a.time);
                         const tB = getTimeMinutes(b.time);
@@ -1908,11 +1922,9 @@ function setupSmokingInfo() {
 
     // Geolocation - Find near me (In-app sorting)
     document.getElementById('search-near-smoking')?.addEventListener('click', () => {
-        if (!navigator.geolocation) return alert('브라우저가 위치 정보를 지원하지 않습니다.');
-
-        navigator.geolocation.getCurrentPosition((pos) => {
-            const userLat = pos.coords.latitude;
-            const userLng = pos.coords.longitude;
+        updateUserLocation(() => {
+            const userLat = state.userLocation.lat;
+            const userLng = state.userLocation.lng;
 
             // Calculate distance for all and sort
             const sortedByDistance = [...SMOKING_AREAS].map(area => ({
@@ -1922,8 +1934,6 @@ function setupSmokingInfo() {
 
             renderSmokingList(sortedByDistance);
             alert('현재 위치에서 가장 가까운 순서대로 정렬되었습니다.');
-        }, () => {
-            alert('위치 정보를 가져올 수 없습니다. 권한을 확인해주세요.');
         });
     });
 
